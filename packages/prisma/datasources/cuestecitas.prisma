@@ -1,0 +1,11 @@
+generator cuestecitas {
+  provider      = "prisma-client"
+  output        = "../generated/client-cuestecitas"
+  binaryTargets = [env("PRISMA_BINARY")]
+  runtime       = "bun"
+}
+
+datasource cuestecitas {
+  provider = "postgresql"
+  url      = env("CUESTECITAS_DATABASE_URL")
+}

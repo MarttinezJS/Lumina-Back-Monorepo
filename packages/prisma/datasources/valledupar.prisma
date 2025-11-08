@@ -1,0 +1,11 @@
+generator valledupar {
+  provider      = "prisma-client"
+  output        = "../generated/client-valledupar"
+  binaryTargets = [env("PRISMA_BINARY")]
+  runtime       = "bun"
+}
+
+datasource valledupar {
+  provider = "postgresql"
+  url      = env("VALLEDUPAR_DATABASE_URL")
+}

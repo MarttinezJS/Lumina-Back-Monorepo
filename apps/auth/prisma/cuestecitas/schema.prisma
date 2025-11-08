@@ -1,0 +1,104 @@
+generator client {
+  provider      = "prisma-client"
+  output        = "../../generated/client-cuestecitas"
+  binaryTargets = [env("PRISMA_BINARY")]
+  runtime       = "bun"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("CUESTECITAS_DATABASE_URL")
+}
+
+model Tipo_Identificacion {
+  id     Int     @id @default(autoincrement())
+  name   String  @map("nombre")
+  abb    String  @unique @map("abreviatura")
+  status Boolean @default(true) @map("activo")
+}
+
+model Rubros {
+  id       Int        @id @default(autoincrement())
+  name     String     @map("nombre")
+  income   Boolean
+  status   Boolean    @default(true) @map("activo")
+  Egresos  Egresos[]
+  Ingresos Ingresos[]
+
+  @@unique([name, income], map: "name_income_index")
+}
+
+model Proveedores {
+  id                 Int     @id @default(autoincrement())
+  name               String  @map("nombre")
+  identification     String? @map("identificacion")
+  identificationType String? @map("tipo_identificacion")
+  status             Boolean @default(true) @map("activo")
+  dv                 String?
+
+  @@unique([identificationType, identification, name], map: "type_identification_unique_index")
+}
+
+model Logs {
+  id       Int       @id @default(autoincrement())
+  userId   Int       @map("usuario_id")
+  endpoint String
+  action   Actions   @map("accion")
+  date     DateTime? @default(now()) @map("fecha")
+  persist  Boolean?  @default(true) @map("persistir")
+  resp     String
+  username String    @map("usuario")
+}
+
+model Ingresos {
+  id          Int           @id @default(autoincrement())
+  headingId   Int           @map("rubro_id")
+  date        DateTime      @map("fecha")
+  status      Boolean       @default(true) @map("activo")
+  observation String?       @map("observacion")
+  concept     String        @map("concepto")
+  amount      Int           @map("cantidad")
+  verified    Boolean?      @default(false) @map("verificado")
+  heading     Rubros        @relation(fields: [headingId], references: [id])
+  issues      Incidencias[]
+}
+
+model Egresos {
+  id          Int           @id @default(autoincrement())
+  date        DateTime      @map("fecha")
+  supplierId  String?       @map("proveedor_id")
+  supplier    String?       @map("proveedor")
+  concept     String        @map("concepto")
+  observation String?       @map("observacion")
+  status      Boolean       @default(true) @map("activo")
+  verified    Boolean?      @default(false) @map("verificado")
+  headingId   Int           @map("rubro_id")
+  amount      Int           @map("cantidad")
+  heading     Rubros        @relation(fields: [headingId], references: [id])
+  issues      Incidencias[]
+}
+
+model Incidencias {
+  id          Int       @id @default(autoincrement())
+  solved      Boolean?  @default(false) @map("resuelto")
+  description String    @map("descripcion")
+  createdAt   DateTime? @default(now()) @map("fecha_creacion")
+  solvedAt    DateTime? @map("fecha_resuelto")
+  expenses    Egresos?  @relation(fields: [expenseId], references: [id])
+  expenseId   Int?      @map("egresos_id")
+  incomes     Ingresos? @relation(fields: [incomeId], references: [id])
+  incomeId    Int?      @map("ingresos_id")
+}
+
+model Conceptos {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique @map("nombre")
+  status Boolean @default(true) @map("activo")
+}
+
+enum Actions {
+  guardar
+  editar
+  eliminar
+  consultar
+}

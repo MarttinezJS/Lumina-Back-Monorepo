@@ -1,0 +1,8 @@
+# deps
+.env
+node_modules/
+
+bun.lockb
+
+src/generated/*
+generated/

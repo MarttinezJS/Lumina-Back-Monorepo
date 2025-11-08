@@ -2,10 +2,17 @@
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
   "tasks": {
+    "generate": {
+      "dependsOn": ["^generate"],
+      "outputs": ["./generated"]
+    },
+    "migrate": {
+      "dependsOn": [],
+      "outputs": ["./generated"]
+    },
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "env": ["PORT"]
     },
     "lint": {
       "dependsOn": ["^lint"]

@@ -1,0 +1,123 @@
+generator client {
+    provider      = "prisma-client"
+    output        = "../generated/client-core"
+    binaryTargets = [env("PRISMA_BINARY")]
+    runtime       = "bun"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("CORE_DATABASE_URL")
+}
+
+model Usuarios_Menu {
+    id         Int      @id @default(autoincrement())
+    read       Boolean? @default(false) @map("leer")
+    write      Boolean? @default(false) @map("escribir")
+    view       Boolean? @default(false) @map("ver")
+    update     Boolean? @default(false) @map("editar")
+    delete     Boolean? @default(false) @map("eliminar")
+    print      Boolean? @default(false) @map("imprimir")
+    report     Boolean? @default(false) @map("reporte")
+    menu_id    Int
+    usuario_id Int
+    Menu       Menu     @relation(fields: [menu_id], references: [id])
+    Usuarios   Usuarios @relation(fields: [usuario_id], references: [id])
+
+    @@unique([usuario_id, menu_id], map: "usuarios_menu_pk")
+    @@unique([menu_id, usuario_id], map: "usuarios_menu_unique_index")
+}
+
+model Usuarios {
+    id             Int              @id @default(autoincrement())
+    email          String           @unique @map("correo") @db.VarChar(50)
+    username       String           @unique @map("usuario") @db.VarChar(20)
+    password       String
+    firstName      String           @map("nombre") @db.VarChar(100)
+    lastName       String           @map("apellido") @db.VarChar(100)
+    changePassword Boolean?         @default(false) @map("cambiar_password")
+    status         Boolean?         @default(true) @map("activo")
+    Usuarios_Menu  Usuarios_Menu[]
+    UsuariosApps   UsuariosApps[]
+    UsuariosTenant UsuariosTenant[]
+    Logs           Logs[]
+}
+
+model Menu {
+    id            Int             @id @default(autoincrement())
+    title         String          @map("titulo")
+    endpoint      String          @unique
+    frontPath     String
+    description   String?         @map("descripcion")
+    ancestorId    Int?            @map("menu_padre")
+    read          Boolean?        @default(false) @map("leer")
+    write         Boolean?        @default(false) @map("escribir")
+    view          Boolean?        @default(false) @map("ver")
+    update        Boolean?        @default(false) @map("editar")
+    delete        Boolean?        @default(false) @map("eliminar")
+    print         Boolean?        @default(false) @map("imprimir")
+    report        Boolean?        @default(false) @map("reporte")
+    status        Boolean?        @default(true) @map("activo")
+    position      Int?            @default(0) @map("posicion")
+    appId         Int             @map("app_id")
+    app           Apps            @relation(fields: [appId], references: [id])
+    icon          String?         @map("icono")
+    ancestor      Menu?           @relation("MenuToMenu", fields: [ancestorId], references: [id], map: "ancestor___fk")
+    Menu_Menu     Menu[]          @relation("MenuToMenu")
+    Usuarios_Menu Usuarios_Menu[]
+}
+
+model Apps {
+    id           Int            @id @default(autoincrement())
+    name         String         @unique @map("nombre")
+    description  String?        @map("descripcion")
+    icon         String?        @map("icono")
+    url          String
+    status       Boolean?       @default(true) @map("activo")
+    UsuariosApps UsuariosApps[]
+    Menu         Menu[]
+}
+
+model UsuariosApps {
+    id         Int      @id @default(autoincrement())
+    userId     Int      @map("usuario_id")
+    appId      Int      @map("app_id")
+    assignedAt DateTime @default(now()) @map("asignado_en")
+    user       Usuarios @relation(fields: [userId], references: [id])
+    app        Apps     @relation(fields: [appId], references: [id])
+}
+
+model Tenant {
+    id     Int              @id @default(autoincrement())
+    name   String           @unique @map("nombre")
+    status Boolean?         @default(true) @map("activo")
+    users  UsuariosTenant[]
+}
+
+model UsuariosTenant {
+    userId    Int      @map("usuario")
+    tenantId  Int      @map("tenant")
+    createdAt DateTime @default(now()) @map("fecha")
+    tenant    Tenant   @relation(fields: [tenantId], references: [id])
+    user      Usuarios @relation(fields: [userId], references: [id])
+
+    @@id([userId, tenantId])
+}
+
+model Logs {
+    id       Int       @id @default(autoincrement())
+    userId   Int       @map("usuario_id")
+    endpoint String
+    action   Actions   @map("accion")
+    date     DateTime? @default(now()) @map("fecha")
+    persist  Boolean?  @default(true) @map("persistir")
+    resp     String
+    user     Usuarios  @relation(fields: [userId], references: [id])
+}
+
+enum Actions {
+    guardar
+    editar
+    eliminar
+    consultar
+}
