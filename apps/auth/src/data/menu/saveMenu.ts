@@ -1,11 +1,9 @@
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 import { MenuFields } from "../../models";
-import { openPrisma } from "../../services";
-import { getClient } from "../../helpers/prismaClient";
-import { PrismaClient } from "../../../generated/client-core/client";
+import { CoreClient, openPrisma } from "@lumina/prisma";
 
 export const saveMenu = ({ ancestor, ...data }: MenuFields) =>
-  openPrisma(getClient("Core"), async (client: PrismaClient) => {
+  openPrisma("Core", async (client: CoreClient) => {
     const found = await client.menu.findUnique({
       where: { endpoint: data.endpoint },
     });

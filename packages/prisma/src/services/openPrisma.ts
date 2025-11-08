@@ -6,9 +6,7 @@ import {
   PrismaClientValidationError,
 } from "@prisma/client/runtime/library";
 import { ErrorResp } from "../models";
-import { PrismaClient as ClientCuestecitas } from "../../generated/client-cuestecitas/client";
-import { PrismaClient as ClientValledupar } from "../../generated/client-valledupar/client";
-import { PrismaClient as Core } from "../../generated/client-core/client";
+import { getClient, Tenant } from "./getClient";
 
 interface PrismaActionResp<T> {
   data: T | T[];
@@ -16,7 +14,7 @@ interface PrismaActionResp<T> {
 }
 
 export const openPrisma = async <T extends any>(
-  tenant: ClientCuestecitas | ClientValledupar | Core | undefined,
+  tenant: Tenant,
   callback: (client: any) => Promise<PrismaActionResp<T>>
 ): Promise<ErrorResp<T>> => {
   let resp: ErrorResp<T> = {
@@ -24,8 +22,8 @@ export const openPrisma = async <T extends any>(
     message: "",
     statusCode: 200,
   };
-
-  if (!tenant) {
+  const client = getClient(tenant);
+  if (!client) {
     resp = {
       message: "Tenant no encontrado",
       isError: true,
@@ -34,8 +32,8 @@ export const openPrisma = async <T extends any>(
     return resp;
   }
   try {
-    await tenant.$connect();
-    const { data, message } = await callback(tenant);
+    await client.$connect();
+    const { data, message } = await callback(client);
     resp.statusCode = data instanceof Array && data.length == 0 ? 202 : 200;
     resp.data = data;
     resp.message = message;
@@ -82,7 +80,7 @@ export const openPrisma = async <T extends any>(
       };
     }
   } finally {
-    await tenant.$disconnect();
+    await client.$disconnect();
   }
   return resp;
 };

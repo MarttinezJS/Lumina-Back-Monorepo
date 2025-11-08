@@ -1,9 +1,7 @@
-import { openPrisma } from "../services";
-import { getClient } from "../helpers/prismaClient";
-import { PrismaClient } from "../../generated/client-core/client";
+import { CoreClient, openPrisma } from "@lumina/prisma";
 
 export const getTenants = (page: number, size: number, name: string) =>
-  openPrisma(getClient("Core"), async (client: PrismaClient) => {
+  openPrisma("Core", async (client: CoreClient) => {
     const offset = page * size;
     const items = await client.tenant.findMany({
       take: size,
@@ -38,7 +36,7 @@ export const getTenants = (page: number, size: number, name: string) =>
   });
 
 export const getAllTenants = () =>
-  openPrisma(getClient("Core"), async (client: PrismaClient) => {
+  openPrisma("Core", async (client: CoreClient) => {
     const items = await client.tenant.findMany();
     return {
       data: items,

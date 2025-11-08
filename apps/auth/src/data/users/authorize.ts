@@ -1,10 +1,8 @@
+import { CoreClient, openPrisma } from "@lumina/prisma";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
-import { openPrisma } from "../../services";
-import { getClient } from "../../helpers/prismaClient";
-import { PrismaClient } from "../../../generated/client-core/client";
 
 export const authorize = (userId: number, endpoint: string | undefined) =>
-  openPrisma(getClient("Core"), async (client: PrismaClient) => {
+  openPrisma("Core", async (client: CoreClient) => {
     if (!endpoint) {
       throw new PrismaClientValidationError(
         "No se encontró ruta para validar.",

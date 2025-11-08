@@ -1,13 +1,20 @@
 {
-  "name": "@repo/prisma",
+  "name": "@lumina/prisma",
   "version": "1.0.0",
-  "main": "./index.ts",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "scripts": {
-    "migrate": "bun migrate:valledupar && bun migrate:cuestecitas",
-    "migration": "bunx prisma migrate dev --schema ./temp/merged-schema.prisma",
-    "merge": "bun  ./merge",
+    "migrate": "bun migrate:valledupar && bun migrate:cuestecitas && bun migrate:core",
+    "migration": "bunx prisma migrate dev --schema ./src/temp/merged-schema.prisma",
+    "merge": "bun  ./src/merge",
+    "migrate:core": "bunx prisma migrate dev --schema ./src/core/core.schema.prisma",
     "migrate:valledupar": "bun merge valledupar.prisma && bun migration",
-    "migrate:cuestecitas": "bun merge cuestecitas.prisma && bun migration"
+    "migrate:cuestecitas": "bun merge cuestecitas.prisma && bun migration",
+    "generate": "bun generate:valledupar && bun generate:cuestecitas && bun generate:core",
+    "generation": "bunx prisma generate --schema ./src/temp/merged-schema.prisma",
+    "generate:core": "bunx prisma generate --schema ./src/core/core.schema.prisma",
+    "generate:valledupar": "bun merge valledupar.prisma && bun generation",
+    "generate:cuestecitas": "bun merge cuestecitas.prisma && bun generation"
   },
   "dependencies": {
     "@prisma/client": "^6.16.2"

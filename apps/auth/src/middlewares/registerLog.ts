@@ -1,8 +1,8 @@
 import { createMiddleware } from "hono/factory";
 import { saveLog } from "../data";
 import { decodeJwt } from "../services";
-import { Actions } from "../../generated/client-cuestecitas/enums";
 import { getSignedCookie } from "hono/cookie";
+import { Actions } from "@lumina/prisma";
 export const registerLog = createMiddleware(async (context, next) => {
   await next();
   try {

@@ -1,11 +1,11 @@
-import { PrismaClient } from "../../../generated/client-core/client";
-import { getClient } from "../../helpers/prismaClient";
+import { CoreClient, openPrisma } from "@lumina/prisma";
 import { TreeNode } from "../../models";
-import { openPrisma } from "../../services";
+
 type Node = TreeNode & { ancestorId: number | null; position: number | null };
 let maxId: number = 0;
+
 export const getMenuTree = (userId: number) =>
-  openPrisma(getClient("Core"), async (client: PrismaClient) => {
+  openPrisma("Core", async (client: CoreClient) => {
     const menus = await client.menu.findMany({
       include: {
         Usuarios_Menu: {

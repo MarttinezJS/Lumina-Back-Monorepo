@@ -1,9 +1,7 @@
-import { PrismaClient } from "../../../generated/client-core/client";
-import { getClient } from "../../helpers/prismaClient";
-import { openPrisma } from "../../services";
+import { CoreClient, openPrisma } from "@lumina/prisma";
 
 export const getMenu = (page: number, size: number, where?: any) =>
-  openPrisma(getClient("Core"), async (client: PrismaClient) => {
+  openPrisma("Core", async (client: CoreClient) => {
     const offset = page * size;
     const results = await client.menu.findMany({
       take: size,

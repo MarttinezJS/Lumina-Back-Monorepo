@@ -1,10 +1,8 @@
+import { CoreClient, openPrisma } from "@lumina/prisma";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
-import { openPrisma } from "../../services";
-import { getClient } from "../../helpers/prismaClient";
-import { PrismaClient } from "../../../generated/client-core/client";
 
 export const updateMenu = (id: number, { endpoint, ...data }: Menu) =>
-  openPrisma(getClient("Core"), async (client: PrismaClient) => {
+  openPrisma("Core", async (client: CoreClient) => {
     const found = await client.menu.findUnique({
       where: { id },
     });

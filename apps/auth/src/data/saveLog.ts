@@ -1,7 +1,6 @@
-import { getClient } from "../helpers/prismaClient";
-import { openPrisma } from "../services";
+import { openPrisma, Tenant } from "@lumina/prisma";
 
-export const saveLog = (data: Logs, tenant: string) =>
-  openPrisma(getClient(tenant), async (client) => ({
+export const saveLog = (data: Logs, tenant: Tenant) =>
+  openPrisma(tenant, async (client) => ({
     data: await client.logs.create({ data }),
   }));

@@ -8,6 +8,7 @@
     "deploy": "bunx prisma migrate deploy --schema ../../packages/prisma/cuestecitas/schema.prisma && bunx prisma migrate deploy --schema ../../packages/prisma/valledupar/schema.prisma && bunx prisma migrate deploy --schema ../../packages/prisma/core/schema.prisma"
   },
   "dependencies": {
+    "@lumina/prisma": "*",
     "jsonwebtoken": "^9.0.2",
     "node-forge": "^1.3.1",
     "uuid": "^13.0.0"

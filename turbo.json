@@ -3,12 +3,12 @@
   "ui": "tui",
   "tasks": {
     "generate": {
-      "dependsOn": ["^generate"],
-      "outputs": ["./generated"]
+      "dependsOn": [],
+      "cache": false
     },
     "migrate": {
       "dependsOn": [],
-      "outputs": ["./generated"]
+      "cache": false
     },
     "build": {
       "dependsOn": ["^build"],

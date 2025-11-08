@@ -1,10 +1,8 @@
-import { PrismaClient } from "../../../generated/client-core/client";
-import { getClient } from "../../helpers/prismaClient";
+import { CoreClient, openPrisma } from "@lumina/prisma";
 import { UserMenuRequest } from "../../schemas";
-import { openPrisma } from "../../services";
 
 export const assignPermissions = (userMenu: UserMenuRequest) =>
-  openPrisma(getClient("Core"), async (client: PrismaClient) => {
+  openPrisma("Core", async (client: CoreClient) => {
     await client.usuarios_Menu.deleteMany({
       where: {
         usuario_id: userMenu.userId,

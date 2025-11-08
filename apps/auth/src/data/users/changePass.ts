@@ -1,9 +1,7 @@
-import { PrismaClient } from "../../../generated/client-core/client";
-import { getClient } from "../../helpers/prismaClient";
-import { openPrisma } from "../../services";
+import { CoreClient, openPrisma } from "@lumina/prisma";
 
 export const changePass = (id: number, password: string) =>
-  openPrisma(getClient("Core"), async (client: PrismaClient) => {
+  openPrisma("Core", async (client: CoreClient) => {
     const result = await client.usuarios.update({
       where: {
         id,

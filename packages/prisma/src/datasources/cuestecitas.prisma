@@ -1,6 +1,6 @@
 generator cuestecitas {
   provider      = "prisma-client"
-  output        = "../generated/client-cuestecitas"
+  output        = "../generated/client"
   binaryTargets = [env("PRISMA_BINARY")]
   runtime       = "bun"
 }
