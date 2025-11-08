@@ -1,6 +1,6 @@
 import { getSignedCookie } from "hono/cookie";
-import { decodeJwt } from "../services";
 import { createMiddleware } from "hono/factory";
+import { decodeJwt } from "@lumina/security";
 
 export const verifyToken = createMiddleware(async (c, next) => {
   const sessionCookie = await getSignedCookie(c, Bun.env.SECRET_SEED!, "auth");

@@ -25,17 +25,14 @@ import {
   getAllUsers,
   getUserById,
 } from "./controllers";
-import { registerLog, validateFields } from "./middlewares";
-import { initJwk } from "./config";
-import { setBoundData } from "./services";
-import { verifyToken } from "./middlewares";
-import { openPrisma, PrismaClient } from "@lumina/prisma";
+import { registerLog, validateFields, verifyToken } from "@lumina/middlewares";
+import { initJwk, setBoundData } from "@lumina/security";
 const serve = async () => {
   const app = new Hono();
 
-  // await initJwk();
-  // setBoundData();
-  // // initTenants();
+  await initJwk();
+  setBoundData();
+  // initTenants();
   app.on(
     ["GET", "POST", "DELETE", "PUT"],
     ["/users/*", "/menus/*"],
@@ -47,8 +44,8 @@ const serve = async () => {
     return next();
   });
 
-  // // Usuarios
-  // app.use("/users/*", verifyToken);
+  // Usuarios
+  app.use("/users/*", verifyToken);
   app.post("/users/menu");
   app.post("/users", validateFields(userSchema), createUser);
   app.put("/users/:id", validateFields(updateUserSchema), updateUserController);
@@ -69,7 +66,7 @@ const serve = async () => {
   );
 
   // Menus
-  // app.use("/menus/*", verifyToken);
+  app.use("/menus/*", verifyToken);
   app.post("/menus", validateFields(menuSchema), createMenu);
   app.put("/menus/:id", validateFields(menuSchema), updateMenuController);
   app.get("/menus", getMenuController);

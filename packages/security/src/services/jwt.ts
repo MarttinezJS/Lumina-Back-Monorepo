@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import { importPKCS8, importSPKI, jwtVerify, SignJWT } from "jose";
-import { v4 } from "uuid";
+import { v7 } from "uuid";
 import { getAbsolutePath } from "../helpers/getAbsolutePath";
 
 const dir = getAbsolutePath() + "/generated/jwk";
@@ -26,7 +26,7 @@ export const generateJwt = async (
   secondsToExpire: number,
   algorithm = "RS256",
   keyId = kid,
-  jwtId = v4()
+  jwtId = v7()
 ) => {
   const privateKey = await importPKCS8(keys.privateKeyPem, algorithm);
   const now = Math.round(Date.now() / 1000);

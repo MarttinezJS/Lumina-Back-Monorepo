@@ -1,5 +1,4 @@
-import { StringFilter as StringC } from "../../generated/client-cuestecitas/commonInputTypes";
-import { StringFilter as StringV } from "../../generated/client-valledupar/commonInputTypes";
+import { StringFilter } from "../generated/client/commonInputTypes";
 
 export const convert2Boolean = (query: string) => {
   if (query == null) return;
@@ -13,9 +12,7 @@ export const convert2Boolean = (query: string) => {
   }
 };
 
-export const convert2String = (
-  query: string
-): StringC | StringV | undefined => {
+export const convert2String = (query: string): StringFilter | undefined => {
   if (query == null) return;
   return {
     contains: query,

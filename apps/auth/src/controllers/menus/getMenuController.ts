@@ -4,7 +4,7 @@ import {
   convert2Boolean,
   convert2Number,
   convert2String,
-} from "../../services";
+} from "@lumina/prisma";
 
 export const getMenuController = async (context: Context<Env, "", {}>) => {
   try {

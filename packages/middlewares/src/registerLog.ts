@@ -1,8 +1,9 @@
 import { createMiddleware } from "hono/factory";
-import { saveLog } from "../data";
-import { decodeJwt } from "../services";
 import { getSignedCookie } from "hono/cookie";
+import { decodeJwt } from "@lumina/security";
+import { saveLog } from "./data";
 import { Actions } from "@lumina/prisma";
+
 export const registerLog = createMiddleware(async (context, next) => {
   await next();
   try {
@@ -23,7 +24,7 @@ export const registerLog = createMiddleware(async (context, next) => {
           endpoint: context.req.raw.url.split("/").slice(3).join("/"),
           userId: data.payload.data.id,
           resp: respStringify,
-        } as Logs,
+        },
         tenant
       );
     }

@@ -1,5 +1,5 @@
+import { decodeJwt } from "@lumina/security";
 import { Context, Env } from "hono";
-import { decodeJwt } from "../services";
 import { getSignedCookie } from "hono/cookie";
 
 export const checkToken = async (context: Context<Env, "/users/token", {}>) => {

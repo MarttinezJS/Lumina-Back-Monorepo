@@ -1,8 +1,7 @@
 import { Context, Env } from "hono";
 import { findByUsername } from "../data";
-import { generateJwt } from "../services";
-import { v7 as uuid } from "uuid";
 import { setSignedCookie } from "hono/cookie";
+import { generateJwt } from "@lumina/security";
 const login = async (c: Context<Env, "/", {}>) => {
   const { username, password, tenant } = await c.req.json();
 
@@ -47,7 +46,6 @@ const login = async (c: Context<Env, "/", {}>) => {
       domain: Bun.env.ENVIRONMENT === "prd" ? ".iglesia-imac.com" : undefined,
     });
 
-    c.res.headers.append("no-p", uuid());
     return c.json({
       error: false,
       message: "",
