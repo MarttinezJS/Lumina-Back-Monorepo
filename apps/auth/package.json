@@ -3,10 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "echo Build",
-    "dev": "bun run --hot --env-file=.env --env-file=../../.env src/index.ts",
-    "generate": "bunx prisma generate --schema ../../packages/prisma/cuestecitas/schema.prisma && bunx prisma generate --schema ../../packages/prisma/valledupar/schema.prisma && bunx prisma generate --schema ../../packages/prisma/core/schema.prisma",
-    "migrate": "bunx prisma migrate dev --schema ../../packages/prisma/cuestecitas/schema.prisma && bunx prisma migrate dev --schema ../../packages/prisma/valledupar/schema.prisma && bunx prisma migrate dev --schema ../../packages/prisma/core/schema.prisma",
-    "deploy": "bunx prisma migrate deploy --schema ../../packages/prisma/cuestecitas/schema.prisma && bunx prisma migrate deploy --schema ../../packages/prisma/valledupar/schema.prisma && bunx prisma migrate deploy --schema ../../packages/prisma/core/schema.prisma"
+    "dev": "bun run --hot --env-file=.env --env-file=../../.env src/index.ts"
   },
   "dependencies": {
     "@lumina/prisma": "workspace:*",

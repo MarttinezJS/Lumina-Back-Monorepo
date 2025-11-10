@@ -1,0 +1,45 @@
+import { openPrisma, Tenant } from "@lumina/prisma";
+
+export const getExpenses = (
+  page: number,
+  size: number,
+  where: any,
+  tenant: Tenant
+) =>
+  openPrisma(tenant, async (client) => {
+    const offset = page * size;
+    const items = await client.egresos.findMany({
+      take: size,
+      skip: offset,
+      include: {
+        heading: true,
+        issues: {
+          omit: { expenseId: true, incomeId: true },
+          orderBy: [{ solved: "asc" }, { createdAt: "desc" }],
+          where: {
+            solved: false,
+          },
+        },
+      },
+      where,
+      orderBy: [{ date: "desc" }, { supplier: "asc" }],
+      omit: {
+        headingId: true,
+      },
+    });
+    const count = await client.egresos.count({
+      select: {
+        _all: true,
+      },
+      where,
+    });
+    return {
+      data: {
+        count: count._all,
+        next: items.length == size ? page + 1 : null,
+        previous: page > 0 ? page - 1 : null,
+        results: items,
+      },
+      message: "Consulta de salidas.",
+    };
+  });

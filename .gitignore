@@ -1,12 +1,12 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # Dependencies
-node_modules
+**/node_modules
 .pnp
 .pnp.js
 
 # Local env files
-*.env
+**/.env
 .env.local
 .env.development.local
 .env.test.local
@@ -25,7 +25,7 @@ coverage
 .next/
 out/
 build
-dist/
+**/dist/
 
 
 # Debug
@@ -39,7 +39,10 @@ build.log*
 generated/
 
 # Temporal
-temp
+**/temp
 
 # docker
 docker-compose.yml
+
+**/bun.lockb
+bun.lock

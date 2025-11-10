@@ -5,11 +5,6 @@ import { PrismaClient as Valledupar } from "../generated/client-valledupar/clien
 import { PrismaClient as Core } from "../generated/client-core/client";
 
 const options: Subset<PrismaClientOptions, PrismaClientOptions> = {
-  omit: {
-    usuarios: {
-      password: true,
-    },
-  },
   errorFormat: "minimal",
 };
 
@@ -18,11 +13,18 @@ export type Tenant = "Cuestecitas" | "Valledupar" | "Core";
 export const getClient = (tenant: Tenant | null) => {
   switch (tenant) {
     case "Cuestecitas":
-      return new Cuestecitas();
+      return new Cuestecitas(options as any);
     case "Valledupar":
-      return new Valledupar();
+      return new Valledupar(options as any);
     case "Core":
-      return new Core(options as any);
+      return new Core({
+        omit: {
+          usuarios: {
+            password: true,
+          },
+        },
+        ...(options as any),
+      });
 
     default:
       return;

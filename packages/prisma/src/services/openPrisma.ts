@@ -22,6 +22,7 @@ export const openPrisma = async <T extends any>(
     message: "",
     statusCode: 200,
   };
+
   const client = getClient(tenant);
   if (!client) {
     resp = {

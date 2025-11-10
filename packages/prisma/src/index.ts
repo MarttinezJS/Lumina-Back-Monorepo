@@ -8,4 +8,7 @@ export { Actions } from "./generated/client-cuestecitas/enums";
 export {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
+  PrismaClientInitializationError,
+  PrismaClientUnknownRequestError,
+  PrismaClientRustPanicError,
 } from "@prisma/client/runtime/library";

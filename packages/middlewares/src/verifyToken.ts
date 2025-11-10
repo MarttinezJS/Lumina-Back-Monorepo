@@ -4,6 +4,7 @@ import { decodeJwt } from "@lumina/security";
 
 export const verifyToken = createMiddleware(async (c, next) => {
   const sessionCookie = await getSignedCookie(c, Bun.env.SECRET_SEED!, "auth");
+
   let pass = false;
   try {
     if (sessionCookie) {

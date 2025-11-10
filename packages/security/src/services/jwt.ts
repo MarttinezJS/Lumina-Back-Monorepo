@@ -1,9 +1,8 @@
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import { importPKCS8, importSPKI, jwtVerify, SignJWT } from "jose";
 import { v7 } from "uuid";
-import { getAbsolutePath } from "../helpers/getAbsolutePath";
 
-const dir = getAbsolutePath() + "/generated/jwk";
+const dir = "/tmp/lumina/generated/jwk";
 if (!existsSync(dir)) {
   mkdirSync(dir, { recursive: true });
 }
@@ -16,7 +15,7 @@ let keys: Keys;
 let kid: string;
 
 export const setBoundData = () => {
-  const dir = getAbsolutePath() + "/generated/jwk";
+  const dir = "/tmp/lumina/generated/jwk";
   kid = JSON.parse(readFileSync(`${dir}/jwk.json`).toString()).kid;
   keys = JSON.parse(readFileSync(`${dir}/jwk-meta.json`).toString());
 };

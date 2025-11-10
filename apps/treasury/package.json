@@ -1,0 +1,14 @@
+{
+  "name": "treasury",
+  "scripts": {
+    "build": "echo Build",
+    "dev": "bun run --hot --env-file=.env --env-file=../../.env src/index.ts"
+  },
+  "dependencies": {
+    "@lumina/middlewares": "^",
+    "@lumina/prisma": "workspace:*",
+    "@lumina/utils": "workspace:*",
+    "@lumina/security": "workspace:*",
+    "node-xlsx": "^0.24.0"
+  }
+}

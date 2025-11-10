@@ -15,7 +15,7 @@
     "migrate:valledupar": "bun merge valledupar.prisma && bun migration",
     "migrate:cuestecitas": "bun merge cuestecitas.prisma && bun migration",
     "generate": "bun generate:valledupar && bun generate:cuestecitas && bun generate:core",
-    "generation": "bunx prisma generate --schema ./src/temp/merged-schema.prisma --no-engine",
+    "generation": "bunx prisma generate --schema ./src/temp/merged-schema.prisma",
     "generate:core": "bunx prisma generate --schema ./src/core/core.schema.prisma",
     "generate:valledupar": "bun merge valledupar.prisma && bun generation",
     "generate:cuestecitas": "bun merge cuestecitas.prisma && bun generation"
