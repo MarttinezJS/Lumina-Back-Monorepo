@@ -1,5 +1,8 @@
-import { CoreClient, openPrisma } from "@lumina/prisma";
-import { PrismaClientValidationError } from "@prisma/client/runtime/library";
+import {
+  CoreClient,
+  openPrisma,
+  PrismaClientValidationError,
+} from "@lumina/prisma";
 
 export const authorize = (userId: number, endpoint: string | undefined) =>
   openPrisma("Core", async (client: CoreClient) => {

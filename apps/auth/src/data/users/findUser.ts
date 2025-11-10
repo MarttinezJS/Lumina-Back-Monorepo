@@ -1,6 +1,8 @@
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-
-import { CoreClient, openPrisma } from "@lumina/prisma";
+import {
+  CoreClient,
+  openPrisma,
+  PrismaClientKnownRequestError,
+} from "@lumina/prisma";
 
 export const findByUsername = (username: string) =>
   openPrisma("Core", async (client: CoreClient) => ({

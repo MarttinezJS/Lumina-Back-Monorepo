@@ -1,5 +1,3 @@
-import { StringFilter } from "../generated/client/commonInputTypes";
-
 export const convert2Boolean = (query: string) => {
   if (query == null) return;
   switch (query) {
@@ -12,7 +10,7 @@ export const convert2Boolean = (query: string) => {
   }
 };
 
-export const convert2String = (query: string): StringFilter | undefined => {
+export const convert2String = (query: string) => {
   if (query == null) return;
   return {
     contains: query,

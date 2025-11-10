@@ -145,8 +145,10 @@ export const initJwk = async () => {
     const file = readFileSync(workDir + "/jwk-meta.json").toString();
     publicKeyPem = JSON.parse(file).publicKeyPem;
   } else {
-    const keyId = process.env.SECRET_SEED ?? "mFUCwg9u3YcX8z";
-
+    const keyId = process.env.SECRET_SEED;
+    if (!keyId) {
+      throw new Error("No se encontró el secret seed");
+    }
     const { jwk, meta } = await generateJwk("RS256", 2048, keyId);
     publicKeyPem = meta.publicKeyPem;
     const dir = getAbsolutePath() + "/generated/jwk";

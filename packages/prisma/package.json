@@ -1,9 +1,13 @@
 {
   "name": "@lumina/prisma",
   "version": "1.0.0",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "bun generate && tsc --project tsconfig.json",
     "migrate": "bun migrate:valledupar && bun migrate:cuestecitas && bun migrate:core",
     "migration": "bunx prisma migrate dev --schema ./src/temp/merged-schema.prisma",
     "merge": "bun  ./src/merge",
@@ -11,7 +15,7 @@
     "migrate:valledupar": "bun merge valledupar.prisma && bun migration",
     "migrate:cuestecitas": "bun merge cuestecitas.prisma && bun migration",
     "generate": "bun generate:valledupar && bun generate:cuestecitas && bun generate:core",
-    "generation": "bunx prisma generate --schema ./src/temp/merged-schema.prisma",
+    "generation": "bunx prisma generate --schema ./src/temp/merged-schema.prisma --no-engine",
     "generate:core": "bunx prisma generate --schema ./src/core/core.schema.prisma",
     "generate:valledupar": "bun merge valledupar.prisma && bun generation",
     "generate:cuestecitas": "bun merge cuestecitas.prisma && bun generation"

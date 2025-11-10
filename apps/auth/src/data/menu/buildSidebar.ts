@@ -1,6 +1,9 @@
-import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 import { MenuSidebarItem, MenuSubItem } from "../../models";
-import { CoreClient, openPrisma } from "@lumina/prisma";
+import {
+  CoreClient,
+  openPrisma,
+  PrismaClientValidationError,
+} from "@lumina/prisma";
 
 export const buildSidebar = (userId: number) =>
   openPrisma("Core", async (client: CoreClient) => {

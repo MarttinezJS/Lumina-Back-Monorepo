@@ -9,7 +9,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --summarize",
     "dev": "turbo run dev --parallel",
     "prisma:migrate": "turbo run migrate --filter=@lumina/prisma",
     "prisma:generate": "turbo run generate --filter=@lumina/prisma",

@@ -7,8 +7,19 @@ const login = async (c: Context<Env, "/", {}>) => {
 
   try {
     const resp = await findByUsername(username);
-
     const found = resp.data as any;
+
+    if (resp.isError) {
+      return c.json(
+        {
+          error: resp.isError,
+          message: resp.message,
+          status: resp.statusCode,
+          body: resp.isError ? resp.meta : resp.data,
+        },
+        resp.statusCode
+      );
+    }
     if (found == null) {
       console.error("Usuario no existe");
 

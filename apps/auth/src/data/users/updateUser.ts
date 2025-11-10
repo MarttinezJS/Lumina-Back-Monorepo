@@ -1,6 +1,9 @@
-import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 import { User } from "../../models";
-import { CoreClient, openPrisma } from "@lumina/prisma";
+import {
+  CoreClient,
+  openPrisma,
+  PrismaClientValidationError,
+} from "@lumina/prisma";
 
 export const updateUser = (id: number, data: User) =>
   openPrisma("Core", async (client: CoreClient) => {

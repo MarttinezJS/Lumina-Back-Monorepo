@@ -1,0 +1,7 @@
+.turbo
+node_modules
+src/
+*.md
+.env
+tsconfig.json
+bun.lockb

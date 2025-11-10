@@ -1,6 +1,9 @@
-import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 import { MenuFields } from "../../models";
-import { CoreClient, openPrisma } from "@lumina/prisma";
+import {
+  CoreClient,
+  openPrisma,
+  PrismaClientValidationError,
+} from "@lumina/prisma";
 
 export const saveMenu = ({ ancestor, ...data }: MenuFields) =>
   openPrisma("Core", async (client: CoreClient) => {

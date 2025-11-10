@@ -1,0 +1,12 @@
+[
+  {
+    "vault_path": "dev/backend",
+    "set": {
+      "CORE_DATABASE_URL": "CORE_DATABASE_URL",
+      "CUESTECITAS_DATABASE_URL": "CUESTECITAS_DATABASE_URL",
+      "PRISMA_BINARY": "PRISMA_BINARY",
+      "VALLEDUPAR_DATABASE_URL ": "VALLEDUPAR_DATABASE_URL",
+      "SECRET_SEED": "SECRET_SEED"
+    }
+  }
+]

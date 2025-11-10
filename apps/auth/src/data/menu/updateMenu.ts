@@ -1,5 +1,8 @@
-import { CoreClient, openPrisma } from "@lumina/prisma";
-import { PrismaClientValidationError } from "@prisma/client/runtime/library";
+import {
+  CoreClient,
+  openPrisma,
+  PrismaClientValidationError,
+} from "@lumina/prisma";
 
 export const updateMenu = (id: number, { endpoint, ...data }: Menu) =>
   openPrisma("Core", async (client: CoreClient) => {
