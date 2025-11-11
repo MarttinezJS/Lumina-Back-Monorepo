@@ -32,7 +32,6 @@ const serve = async () => {
 
   await initJwk();
   setBoundData();
-  // initTenants();
   app.on(
     ["GET", "POST", "DELETE", "PUT"],
     ["/users/*", "/menus/*"],

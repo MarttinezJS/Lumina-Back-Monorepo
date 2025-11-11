@@ -1,0 +1,15 @@
+{
+  "name": "admin",
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "echo Build",
+    "dev": "bun run --hot --env-file=.env --env-file=../../.env src/index.ts"
+  },
+  "dependencies": {
+    "@lumina/middlewares": "workspace:*",
+    "@lumina/utils": "workspace:*",
+    "@lumina/prisma": "workspace:*",
+    "@lumina/security": "workspace:*"
+  }
+}

@@ -17,6 +17,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "dev:auth": "turbo run dev --filter=auth",
+    "dev:admin": "turbo run dev --filter=admin",
     "dev:treasury": "turbo run dev --filter=treasury"
   },
   "packageManager": "bun@1.3.0",

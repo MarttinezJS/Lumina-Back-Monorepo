@@ -72,7 +72,7 @@ model Apps {
     name         String         @unique @map("nombre")
     description  String?        @map("descripcion")
     icon         String?        @map("icono")
-    url          String
+    url          String         @unique
     status       Boolean?       @default(true) @map("activo")
     UsuariosApps UsuariosApps[]
     Menu         Menu[]
