@@ -15,7 +15,8 @@ const login = async (c: Context<Env, "/", {}>) => {
           error: resp.isError,
           message: resp.message,
           status: resp.statusCode,
-          body: resp.isError ? resp.meta : resp.data,
+          body: resp.data,
+          meta: resp.meta,
         },
         resp.statusCode
       );
@@ -54,12 +55,12 @@ const login = async (c: Context<Env, "/", {}>) => {
       secure: Bun.env.ENVIRONMENT === "prd",
       sameSite: "lax",
       path: "/",
-      domain: Bun.env.ENVIRONMENT === "prd" ? ".iglesia-imac.com" : undefined,
+      domain: Bun.env.ENVIRONMENT === "prd" ? ".iglesia-imac.com" : "localhost",
     });
 
     return c.json({
       error: false,
-      message: "",
+      message: `Se ha iniciado sesión como: ${found.firstName} ${found.lastName}`,
       body: tokenData,
     });
   } catch (error) {

@@ -4,18 +4,19 @@ import { TreeNode } from "../../models";
 type Node = TreeNode & { ancestorId: number | null; position: number | null };
 let maxId: number = 0;
 
-export const getMenuTree = (userId: number) =>
+export const getMenuTree = (userId: number, appId: number) =>
   openPrisma("Core", async (client: CoreClient) => {
     const menus = await client.menu.findMany({
       include: {
-        Usuarios_Menu: {
+        permission: {
           where: {
-            usuario_id: userId,
+            usuarioId: userId,
           },
         },
       },
       where: {
         status: true,
+        appId: appId,
       },
     });
     const agg = await client.menu.aggregate({
@@ -23,6 +24,7 @@ export const getMenuTree = (userId: number) =>
         id: true,
       },
     });
+
     maxId = agg._max.id ?? 0;
     const map = new Map<number, Node>();
     const roots: TreeNode[] = [];
@@ -44,34 +46,40 @@ export const getMenuTree = (userId: number) =>
         roots.push(item);
       }
     });
+
     return {
-      data: {
-        name: "",
-        id: 0,
-        children: roots,
-      },
-      message: "Árbol de menus",
+      data:
+        roots.length == 0
+          ? null
+          : {
+              name: "",
+              id: 0,
+              children: roots,
+            },
+      message: roots.length == 0 ? "No se encontraron menus" : "Árbol de menus",
     };
   });
 const parseMenu = ({
-  title,
   id,
-  ancestorId,
-  description,
+  title,
   endpoint,
   frontPath,
-  Usuarios_Menu,
+  description,
+  ancestorId,
+  permission,
   status,
-  ...permissions
-}: Menu & { Usuarios_Menu: Usuarios_Menu[] }): TreeNode => {
-  const permissionList = Object.entries(permissions)
+  appId,
+  ...permissionRequest
+}: Menu & { permission: Permission[] }): TreeNode => {
+  const permissionList = Object.entries(permissionRequest)
     .filter((permission) => permission[1] === true)
-    .map((permission) => {
+    .map((permissionNeeded) => {
       maxId += 1;
-      const allowed =
-        Usuarios_Menu[0]?.[permission[0] as keyof Usuarios_Menu] ?? false;
+      const key = permissionNeeded[0] as keyof Permission;
+      const allowed = permission[0]?.[key];
+
       const node: TreeNode = {
-        name: permission[0],
+        name: key,
         id: maxId,
         isBranch: false,
         metadata: {

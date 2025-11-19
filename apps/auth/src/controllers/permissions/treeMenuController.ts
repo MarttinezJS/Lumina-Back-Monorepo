@@ -2,17 +2,23 @@ import { Context, Env } from "hono";
 import { getMenuTree } from "../../data";
 
 export const treeMenuController = async (
-  context: Context<Env, "/users/:id/menus", {}>
+  context: Context<Env, "/menus/user/:userId/app/:appId/tree", {}>
 ) => {
-  const id = context.req.param("id");
-  const resp = await getMenuTree(Number.parseInt(id));
+  const params = context.req.param();
+  const userId = Number.parseInt(params.userId);
+  const appId = Number.parseInt(params.appId);
+  if (isNaN(userId) || isNaN(appId)) {
+    return;
+  }
+  const resp = await getMenuTree(userId, appId);
 
   return context.json(
     {
       error: resp.isError,
       message: resp.message,
       status: resp.statusCode,
-      body: resp.isError ? resp.meta : resp.data,
+      body: resp.data,
+      meta: resp.meta,
     },
     resp.statusCode
   );

@@ -6,31 +6,33 @@ import { Actions } from "@lumina/prisma";
 
 export const registerLog = createMiddleware(async (context, next) => {
   await next();
-  try {
-    const cookieSession = await getSignedCookie(
-      context,
-      Bun.env.SECRET_SEED!,
-      "auth"
-    );
-    if (cookieSession) {
-      const data = await decodeJwt(cookieSession);
-      const resp = await context.res.clone().json();
-      const respStringify = await JSON.stringify(resp);
-      const tenant = data.payload.data.tenant;
-
-      await saveLog(
-        {
-          action: getAction(context.req.method),
-          endpoint: context.req.raw.url.split("/").slice(3).join("/"),
-          userId: data.payload.data.id,
-          resp: respStringify,
-        },
-        tenant
-      );
-    }
-  } catch (error: any) {
-    console.warn("Log no registrado: ", error.message);
+  const cookieSession = await getSignedCookie(
+    context,
+    Bun.env.SECRET_SEED!,
+    "auth"
+  );
+  let tenant: "Core" = "Core";
+  let username: string | undefined = undefined;
+  if (cookieSession) {
+    const resp = await decodeJwt(cookieSession);
+    const data = resp?.data as { tenant: "Core"; username: string };
+    tenant = data?.tenant ?? "Core";
+    username = data?.username;
   }
+  const resp = await context.res.clone().json();
+  const respStringify = await JSON.stringify(resp);
+  if (username == undefined) {
+    return;
+  }
+  await saveLog(
+    {
+      action: getAction(context.req.method),
+      endpoint: context.req.raw.url.split("/").slice(3).join("/"),
+      username,
+      resp: respStringify,
+    },
+    tenant
+  );
 });
 
 const getAction: any = (method: string) => {

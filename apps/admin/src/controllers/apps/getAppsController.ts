@@ -3,19 +3,24 @@ import { getApps } from "../../data";
 import { convert2Boolean, convert2String } from "@lumina/prisma";
 
 export const getAppsController = async (context: Context<Env, "", {}>) => {
-  const { name, url, status } = context.req.query();
-  const resp = await getApps({
-    name: convert2String(name),
-    url: convert2String(url),
-    status: convert2Boolean(status),
-  });
+  const { name, url, status, page, size } = context.req.query();
+  const resp = await getApps(
+    Number.parseInt(page ?? 0),
+    Number.parseInt(size ?? 10),
+    {
+      name: convert2String(name),
+      url: convert2String(url),
+      status: convert2Boolean(status),
+    }
+  );
 
   return context.json(
     {
       error: resp.isError,
       message: resp.message,
       status: resp.statusCode,
-      body: resp.isError ? resp.meta : resp.data,
+      body: resp.data,
+      meta: resp.meta,
     },
     resp.statusCode
   );

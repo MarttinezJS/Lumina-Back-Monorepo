@@ -2,6 +2,7 @@ import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { exportJWK, exportPKCS8, exportSPKI, generateKeyPair } from "jose";
 import { asn1, md, pki } from "node-forge";
 import { util } from "node-forge";
+import { getAbsolutePath } from "../utils";
 
 const generateJwkCertificate = (
   privateKeyPem: string,
@@ -139,7 +140,7 @@ const printPk = (publicKeyPem: string) => {
 
 export const initJwk = async () => {
   let publicKeyPem;
-  const workDir = "/tmp/lumina/generated/jwk";
+  const workDir = getAbsolutePath() + "/generated/jwk";
   if (existsSync(`${workDir}/jwk-meta.json`)) {
     const file = readFileSync(workDir + "/jwk-meta.json").toString();
     publicKeyPem = JSON.parse(file).publicKeyPem;
@@ -150,13 +151,12 @@ export const initJwk = async () => {
     }
     const { jwk, meta } = await generateJwk("RS256", 2048, keyId);
     publicKeyPem = meta.publicKeyPem;
-    const dir = "/tmp/lumina/generated/jwk";
 
-    if (!existsSync(dir)) {
-      mkdirSync(dir, { recursive: true });
+    if (!existsSync(workDir)) {
+      mkdirSync(workDir, { recursive: true });
     }
-    writeFileSync(`${dir}/jwk.json`, JSON.stringify(jwk, null, 4));
-    writeFileSync(`${dir}/jwk-meta.json`, JSON.stringify(meta, null, 4));
+    writeFileSync(`${workDir}/jwk.json`, JSON.stringify(jwk, null, 4));
+    writeFileSync(`${workDir}/jwk-meta.json`, JSON.stringify(meta, null, 4));
   }
   printPk(publicKeyPem);
 };

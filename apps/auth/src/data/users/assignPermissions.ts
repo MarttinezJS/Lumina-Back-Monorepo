@@ -1,21 +1,39 @@
-import { CoreClient, openPrisma } from "@lumina/prisma";
+import {
+  CoreClient,
+  openPrisma,
+  PrismaClientValidationError,
+} from "@lumina/prisma";
 import { UserMenuRequest } from "../../schemas";
 
-export const assignPermissions = (userMenu: UserMenuRequest) =>
+export const assignPermissions = (
+  { permissions, userId, appId }: UserMenuRequest,
+  tenantName: string
+) =>
   openPrisma("Core", async (client: CoreClient) => {
-    await client.usuarios_Menu.deleteMany({
+    const tenant = await client.tenant.findUnique({
+      where: { name: tenantName },
+    });
+    if (!tenant) {
+      throw new PrismaClientValidationError("Tenant no encontrado", {
+        clientVersion: "1",
+      });
+    }
+    await client.permisos.deleteMany({
       where: {
-        usuario_id: userMenu.userId,
+        tenantId: tenant.id,
+        usuarioId: userId,
+        Menu: { appId },
       },
     });
 
-    const data = userMenu.permissions.map(({ menuId, ...permissions }) => ({
-      menu_id: menuId,
-      usuario_id: userMenu.userId,
+    const data = permissions.map(({ menuId, ...permissions }) => ({
+      menuId: menuId,
+      usuarioId: userId,
+      tenantId: tenant.id,
       ...permissions,
     }));
 
-    const inserted = await client.usuarios_Menu.createMany({
+    const inserted = await client.permisos.createMany({
       data,
     });
 

@@ -13,7 +13,9 @@ export const validateFields = (schema: z.ZodObject) =>
           {
             error: true,
             message: "Error en los campos.",
-            body: error.issues.map((issue) => issue.message),
+            body: error.issues.map(
+              (issue) => `${issue.path}: ${issue.message}`
+            ),
           },
           400
         );

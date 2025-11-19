@@ -31,16 +31,15 @@ RUN cd /temp/prod && bun install --frozen-lockfile --production
 
 FROM base AS release
 WORKDIR /app
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 hono
+# RUN addgroup --system --gid 1001 nodejs
+# RUN adduser --system --uid 1001 hono
 
 ARG APP
 ENV NODE_ENV=production
 ENV APP=${APP}
 
-COPY --from=install --chown=hono:nodejs /temp/prod/apps/${APP} /app/apps/${APP}
-COPY --from=install --chown=hono:nodejs /temp/prod/node_modules /app/node_modules
-COPY --from=install --chown=hono:nodejs /temp/prod/packages /app/packages
-RUN find . -maxdepth 5 -type d
-USER hono
+COPY --from=install /temp/prod/apps/${APP} /app/apps/${APP}
+COPY --from=install /temp/prod/node_modules /app/node_modules
+COPY --from=install /temp/prod/packages /app/packages
+
 ENTRYPOINT ["sh", "-c", " bun run apps/$APP/src/index.ts"]

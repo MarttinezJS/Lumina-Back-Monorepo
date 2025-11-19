@@ -2,7 +2,7 @@ export interface MenuFields {
   ancestor: number;
   endpoint: string;
   frontPath: string;
-  appId: number;
+  app: number;
   title: string;
   delete: boolean;
   print: boolean;

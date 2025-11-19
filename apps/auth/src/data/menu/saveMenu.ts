@@ -5,7 +5,7 @@ import {
   PrismaClientValidationError,
 } from "@lumina/prisma";
 
-export const saveMenu = ({ ancestor, ...data }: MenuFields) =>
+export const saveMenu = ({ ancestor, app, ...data }: MenuFields) =>
   openPrisma("Core", async (client: CoreClient) => {
     const found = await client.menu.findUnique({
       where: { endpoint: data.endpoint },
@@ -15,8 +15,9 @@ export const saveMenu = ({ ancestor, ...data }: MenuFields) =>
         clientVersion: "1",
       });
     }
-    Object.assign(data, { ancestorId: ancestor });
-    const menuCreated = await client.menu.create({ data });
+    const menuCreated = await client.menu.create({
+      data: { ...data, appId: app, ancestorId: ancestor },
+    });
     return {
       data: menuCreated,
       message: "Menú creado correctamente.",

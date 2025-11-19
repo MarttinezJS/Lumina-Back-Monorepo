@@ -1,4 +1,4 @@
-type Usuarios_Menu = {
+type Permission = {
   id: number;
   read: boolean | null;
   write: boolean | null;
@@ -7,6 +7,6 @@ type Usuarios_Menu = {
   delete: boolean | null;
   print: boolean | null;
   report: boolean | null;
-  menu_id: number;
-  usuario_id: number;
+  menuId: number;
+  usuarioId: number;
 };

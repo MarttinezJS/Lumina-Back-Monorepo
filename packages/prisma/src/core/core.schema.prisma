@@ -10,22 +10,23 @@ datasource db {
     url      = env("CORE_DATABASE_URL")
 }
 
-model Usuarios_Menu {
-    id         Int      @id @default(autoincrement())
-    read       Boolean? @default(false) @map("leer")
-    write      Boolean? @default(false) @map("escribir")
-    view       Boolean? @default(false) @map("ver")
-    update     Boolean? @default(false) @map("editar")
-    delete     Boolean? @default(false) @map("eliminar")
-    print      Boolean? @default(false) @map("imprimir")
-    report     Boolean? @default(false) @map("reporte")
-    menu_id    Int
-    usuario_id Int
-    Menu       Menu     @relation(fields: [menu_id], references: [id])
-    Usuarios   Usuarios @relation(fields: [usuario_id], references: [id])
+model Permisos {
+    id        Int      @id @default(autoincrement())
+    read      Boolean? @default(false) @map("leer")
+    write     Boolean? @default(false) @map("escribir")
+    view      Boolean? @default(false) @map("ver")
+    update    Boolean? @default(false) @map("editar")
+    delete    Boolean? @default(false) @map("eliminar")
+    print     Boolean? @default(false) @map("imprimir")
+    report    Boolean? @default(false) @map("reporte")
+    menuId    Int      @map("menu_id")
+    usuarioId Int      @map("usuario_id")
+    tenantId  Int      @map("tenant_id")
+    Menu      Menu     @relation(fields: [menuId], references: [id])
+    Usuarios  Usuarios @relation(fields: [usuarioId], references: [id])
+    Tenant    Tenant   @relation(fields: [tenantId], references: [id])
 
-    @@unique([usuario_id, menu_id], map: "usuarios_menu_pk")
-    @@unique([menu_id, usuario_id], map: "usuarios_menu_unique_index")
+    @@unique([menuId, usuarioId, tenantId], map: "usuarios_menu_unique_index")
 }
 
 model Usuarios {
@@ -37,34 +38,33 @@ model Usuarios {
     lastName       String           @map("apellido") @db.VarChar(100)
     changePassword Boolean?         @default(false) @map("cambiar_password")
     status         Boolean?         @default(true) @map("activo")
-    Usuarios_Menu  Usuarios_Menu[]
+    permission     Permisos[]
     UsuariosApps   UsuariosApps[]
     UsuariosTenant UsuariosTenant[]
-    Logs           Logs[]
 }
 
 model Menu {
-    id            Int             @id @default(autoincrement())
-    title         String          @map("titulo")
-    endpoint      String          @unique
-    frontPath     String
-    description   String?         @map("descripcion")
-    ancestorId    Int?            @map("menu_padre")
-    read          Boolean?        @default(false) @map("leer")
-    write         Boolean?        @default(false) @map("escribir")
-    view          Boolean?        @default(false) @map("ver")
-    update        Boolean?        @default(false) @map("editar")
-    delete        Boolean?        @default(false) @map("eliminar")
-    print         Boolean?        @default(false) @map("imprimir")
-    report        Boolean?        @default(false) @map("reporte")
-    status        Boolean?        @default(true) @map("activo")
-    position      Int?            @default(0) @map("posicion")
-    appId         Int             @map("app_id")
-    app           Apps            @relation(fields: [appId], references: [id])
-    icon          String?         @map("icono")
-    ancestor      Menu?           @relation("MenuToMenu", fields: [ancestorId], references: [id], map: "ancestor___fk")
-    Menu_Menu     Menu[]          @relation("MenuToMenu")
-    Usuarios_Menu Usuarios_Menu[]
+    id          Int        @id @default(autoincrement())
+    title       String     @map("titulo")
+    endpoint    String     @unique
+    frontPath   String
+    description String?    @map("descripcion")
+    ancestorId  Int?       @map("menu_padre")
+    read        Boolean?   @default(false) @map("leer")
+    write       Boolean?   @default(false) @map("escribir")
+    view        Boolean?   @default(false) @map("ver")
+    update      Boolean?   @default(false) @map("editar")
+    delete      Boolean?   @default(false) @map("eliminar")
+    print       Boolean?   @default(false) @map("imprimir")
+    report      Boolean?   @default(false) @map("reporte")
+    status      Boolean?   @default(true) @map("activo")
+    position    Int?       @default(0) @map("posicion")
+    appId       Int        @map("app_id")
+    app         Apps       @relation(fields: [appId], references: [id])
+    icon        String?    @map("icono")
+    ancestor    Menu?      @relation("MenuToMenu", fields: [ancestorId], references: [id], map: "ancestor___fk")
+    Menu_Menu   Menu[]     @relation("MenuToMenu")
+    permission  Permisos[]
 }
 
 model Apps {
@@ -74,24 +74,30 @@ model Apps {
     icon         String?        @map("icono")
     url          String         @unique
     status       Boolean?       @default(true) @map("activo")
+    color        String?
     UsuariosApps UsuariosApps[]
     Menu         Menu[]
 }
 
+model Tenant {
+    id           Int              @id @default(autoincrement())
+    name         String           @unique @map("nombre")
+    status       Boolean?         @default(true) @map("activo")
+    users        UsuariosTenant[]
+    permission   Permisos[]
+    usuariosApps UsuariosApps[]
+}
+
 model UsuariosApps {
-    id         Int      @id @default(autoincrement())
     userId     Int      @map("usuario_id")
     appId      Int      @map("app_id")
+    tenantId   Int      @map("tenant_id")
     assignedAt DateTime @default(now()) @map("asignado_en")
     user       Usuarios @relation(fields: [userId], references: [id])
     app        Apps     @relation(fields: [appId], references: [id])
-}
+    tenant     Tenant   @relation(fields: [tenantId], references: [id])
 
-model Tenant {
-    id     Int              @id @default(autoincrement())
-    name   String           @unique @map("nombre")
-    status Boolean?         @default(true) @map("activo")
-    users  UsuariosTenant[]
+    @@id([userId, appId, tenantId])
 }
 
 model UsuariosTenant {
@@ -106,13 +112,12 @@ model UsuariosTenant {
 
 model Logs {
     id       Int       @id @default(autoincrement())
-    userId   Int       @map("usuario_id")
     endpoint String
     action   Actions   @map("accion")
     date     DateTime? @default(now()) @map("fecha")
     persist  Boolean?  @default(true) @map("persistir")
     resp     String
-    user     Usuarios  @relation(fields: [userId], references: [id])
+    username String    @map("usuario")
 }
 
 enum Actions {

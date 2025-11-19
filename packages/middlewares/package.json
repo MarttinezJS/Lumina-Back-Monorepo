@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@lumina/security": "*",
-    "@lumina/prisma": "*"
+    "@lumina/prisma": "*",
+    "@lumina/utils": "*"
   }
 }

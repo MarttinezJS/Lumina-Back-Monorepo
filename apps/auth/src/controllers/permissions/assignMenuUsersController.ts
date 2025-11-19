@@ -5,14 +5,16 @@ import { UserMenuRequest } from "../../schemas";
 export const assignMenuUsersController = async (
   context: Context<Env, "", {}>
 ) => {
-  const userMenu = (await context.req.json()) as UserMenuRequest;
-  const resp = await assignPermissions(userMenu);
+  const userMenu = await context.req.json<UserMenuRequest>();
+  const tenant = context.res.headers.get("x-tenant");
+  const resp = await assignPermissions(userMenu, tenant!);
   return context.json(
     {
       error: resp.isError,
       message: resp.message,
       status: resp.statusCode,
-      body: resp.isError ? resp.meta : resp.data,
+      body: resp.data,
+      meta: resp.meta,
     },
     resp.statusCode
   );

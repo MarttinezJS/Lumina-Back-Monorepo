@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import {
+  assignUserTenantSchema,
   changePassSchema,
   loginSchema,
   menuSchema,
@@ -24,6 +25,9 @@ import {
   authorizedController,
   getAllUsers,
   getUserById,
+  assignTenantController,
+  getUserApps,
+  logout,
 } from "./controllers";
 import { registerLog, validateFields, verifyToken } from "@lumina/middlewares";
 import { initJwk, setBoundData } from "@lumina/security";
@@ -47,8 +51,18 @@ const serve = async () => {
   app.use("/users/*", verifyToken);
   app.post("/users/menu");
   app.post("/users", validateFields(userSchema), createUser);
+  app.post(
+    "/users/:id/tenants",
+    validateFields(assignUserTenantSchema),
+    assignTenantController
+  );
   app.put("/users/:id", validateFields(updateUserSchema), updateUserController);
   app.get("/users", getAllUsers);
+  app.post(
+    "/users/assign-menu",
+    validateFields(userMenuSchema),
+    assignMenuUsersController
+  );
   app.put(
     "/users/:id/change-password",
     validateFields(changePassSchema),
@@ -56,25 +70,22 @@ const serve = async () => {
   );
   app.get("/users/:id", getUserById);
   app.get("/users/:id/authorize", authorizedController);
-  app.get("/users/:id/menus", treeMenuController);
-  app.get("/users/:id/menus/sidebar", buildSidebarController);
-  app.post(
-    "/users/:id/menus",
-    validateFields(userMenuSchema),
-    assignMenuUsersController
-  );
+  app.get("/users/:id/apps", getUserApps);
 
   // Menus
   app.use("/menus/*", verifyToken);
   app.post("/menus", validateFields(menuSchema), createMenu);
   app.put("/menus/:id", validateFields(menuSchema), updateMenuController);
   app.get("/menus", getMenuController);
+  app.get("/menus/user/:userId/app/:appName/sidebar", buildSidebarController);
+  app.get("/menus/user/:userId/app/:appId/tree", treeMenuController);
 
   app.get("/token", checkToken);
   app.post("/login", validateFields(loginSchema), login);
+  app.post("/logout", logout);
   app.post("/8B7HMzd49AqIyo", validateFields(userSchema), createFirstUser);
 
-  app.get("/tenants", getTenantsController);
+  app.get("/:username/tenants", getTenantsController);
 
   Bun.serve({
     fetch: app.fetch,

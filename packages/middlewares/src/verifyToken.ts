@@ -2,31 +2,31 @@ import { getSignedCookie } from "hono/cookie";
 import { createMiddleware } from "hono/factory";
 import { decodeJwt } from "@lumina/security";
 
-export const verifyToken = createMiddleware(async (c, next) => {
-  const sessionCookie = await getSignedCookie(c, Bun.env.SECRET_SEED!, "auth");
+export const verifyToken = createMiddleware(async (context, next) => {
+  const sessionCookie = await getSignedCookie(
+    context,
+    Bun.env.SECRET_SEED!,
+    "auth"
+  );
+  if (sessionCookie) {
+    const resp = await decodeJwt(sessionCookie);
 
-  let pass = false;
-  try {
-    if (sessionCookie) {
-      const data = await decodeJwt(sessionCookie);
-      const tenant = data.payload.data.tenant;
-      c.res.headers.append("X-TENANT", tenant);
-      if (data != null) {
-        pass = true;
-      }
+    if (resp.isError) {
+      return context.json(
+        {
+          error: resp.isError,
+          message: resp.message,
+          status: resp.statusCode,
+          body: resp.data,
+          meta: resp.meta,
+        },
+        resp.statusCode
+      );
     }
-  } catch (error: any) {
-    pass = false;
+
+    const data = resp.data as { tenant: string };
+    const tenant = data.tenant;
+    context.res.headers.append("X-TENANT", tenant);
+    await next();
   }
-  if (!pass) {
-    return c.json(
-      {
-        error: true,
-        status: 401,
-        message: "Usuario no autorizado",
-      },
-      401
-    );
-  }
-  await next();
 });

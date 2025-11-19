@@ -14,7 +14,8 @@ export const updateIdTypeController = async (
       error: resp.isError,
       message: resp.message,
       status: resp.statusCode,
-      body: resp.isError ? resp.meta : resp.data,
+      body: resp.data,
+      meta: resp.meta,
     },
     resp.statusCode
   );

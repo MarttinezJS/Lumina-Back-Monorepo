@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@lumina/prisma": "workspace:*",
+    "@lumina/utils": "workspace:*",
     "@lumina/middlewares": "^",
     "@lumina/security": "*",
     "jsonwebtoken": "^9.0.2"

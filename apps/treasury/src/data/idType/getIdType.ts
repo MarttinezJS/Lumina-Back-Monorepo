@@ -22,7 +22,8 @@ export const getIdType = (
     return {
       data: {
         count: count._all,
-        next: items.length == size ? page + 1 : null,
+        next:
+          Math.trunc(((page + 1) * size) / count._all) < 1 ? page + 1 : null,
         previous: page > 0 ? page - 1 : null,
         results: items,
       },

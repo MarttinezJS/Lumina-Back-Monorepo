@@ -7,6 +7,12 @@ export const userMenuSchema = z.object({
         ? "Se necesita el id del usuario."
         : "El id debe ser un número.",
   }),
+  appId: z.number({
+    error: (iss) =>
+      iss.input == undefined
+        ? "Se necesita el id de la app."
+        : "El id debe ser un número.",
+  }),
   permissions: z.array(
     z.object({
       menuId: z.number({

@@ -8,8 +8,9 @@ export const getMenu = (page: number, size: number, where?: any) =>
       skip: offset,
       omit: {
         ancestorId: true,
+        appId: true,
       },
-      include: { ancestor: true },
+      include: { ancestor: true, app: true },
       orderBy: {
         id: "desc",
       },

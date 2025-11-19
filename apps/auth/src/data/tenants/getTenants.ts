@@ -1,40 +1,58 @@
 import { CoreClient, openPrisma } from "@lumina/prisma";
 
-export const getTenants = (page: number, size: number, name: string) =>
+export const getTenants = (
+  username: string,
+  page: number,
+  size: number,
+  name: string
+) =>
   openPrisma("Core", async (client: CoreClient) => {
     const offset = page * size;
-    const items = await client.tenant.findMany({
+    const items = await client.usuariosTenant.findMany({
+      where: {
+        user: { username },
+        tenant: {
+          name: {
+            contains: name,
+          },
+        },
+      },
+      omit: {
+        tenantId: true,
+        userId: true,
+      },
+      include: {
+        tenant: true,
+        user: true,
+      },
       take: size,
       skip: offset,
+    });
+    const count = await client.usuariosTenant.count({
       where: {
-        name: {
-          contains: name,
-          mode: "insensitive",
+        user: { username },
+        tenant: {
+          name: {
+            contains: name,
+          },
         },
       },
-    });
-    const count = await client.tenant.count({
       select: {
         _all: true,
-      },
-      where: {
-        name: {
-          contains: name,
-          mode: "insensitive",
-        },
       },
     });
     return {
       data: {
         count: count._all,
-        next: items.length == size ? page + 1 : null,
+        next:
+          Math.trunc(((page + 1) * size) / count._all) < 1 ? page + 1 : null,
         previous: page > 0 ? page - 1 : null,
-        results: items,
+        results: items.map(({ tenant }) => tenant),
       },
-      message: "Tenants",
+      message:
+        items.length == 0 ? "No se encontraron tenants asignados" : "Tenants",
     };
   });
-
 export const getAllTenants = () =>
   openPrisma("Core", async (client: CoreClient) => {
     const items = await client.tenant.findMany();

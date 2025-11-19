@@ -5,3 +5,5 @@ export * from "./getAll";
 export * from "./updateUser";
 export * from "./changePass";
 export * from "./authorize";
+export * from "./assignTenant";
+export * from "./getApps";

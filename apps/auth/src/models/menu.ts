@@ -1,5 +1,6 @@
 type Menu = {
   id: number;
+  appId: number;
   title: string;
   endpoint: string;
   frontPath: string;

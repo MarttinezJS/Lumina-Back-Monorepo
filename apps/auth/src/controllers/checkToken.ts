@@ -8,11 +8,18 @@ export const checkToken = async (context: Context<Env, "/users/token", {}>) => {
     if (!cookie) {
       return context.json({ error: true, message: "Sesión no válida." }, 401);
     }
+
     const resp = await decodeJwt(cookie);
     if (resp) {
       return context.json(
-        { error: false, message: "verificado", body: resp.payload.data },
-        200
+        {
+          error: resp.isError,
+          message: resp.message,
+          status: resp.statusCode,
+          body: resp.data,
+          meta: resp.meta,
+        },
+        resp.statusCode
       );
     }
     return context.json({
