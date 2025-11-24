@@ -1,8 +1,7 @@
 {
   "name": "@lumina/middlewares",
   "version": "1.0.0",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./src/index.js",
   "scripts": {
     "build": "tsc --project tsconfig.json"
   },

@@ -31,10 +31,7 @@ export const getAppsByUser = (userId: number, tenantName: string) =>
         userId: true,
       },
       where: {
-        AND: [
-          { userId },
-          { app: { tenantApps: { every: { tenantId: tenant.id } } } },
-        ],
+        AND: [{ userId }, { tenantId: tenant.id }],
       },
       orderBy: {
         app: {

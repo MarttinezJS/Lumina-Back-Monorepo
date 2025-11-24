@@ -6,8 +6,6 @@ import {
 
 export const updateMenu = (id: number, { endpoint, ...data }: Menu) =>
   openPrisma("Core", async (client: CoreClient) => {
-    console.log(data);
-
     const found = await client.menu.findUnique({
       where: { id },
     });

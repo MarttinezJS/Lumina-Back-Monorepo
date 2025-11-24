@@ -55,7 +55,7 @@ const login = async (c: Context<Env, "/", {}>) => {
       secure: Bun.env.ENVIRONMENT === "prd",
       sameSite: "lax",
       path: "/",
-      domain: Bun.env.ENVIRONMENT === "prd" ? ".iglesia-imac.com" : "localhost",
+      domain: Bun.env.ENVIRONMENT === "prd" ? ".iglesia-imac.com" : undefined,
     });
 
     return c.json({

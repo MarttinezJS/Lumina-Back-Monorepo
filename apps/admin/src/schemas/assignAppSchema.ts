@@ -1,6 +1,9 @@
 import z from "zod/v4";
 
 export const assignAppSchema = z.object({
-  appId: z.number("Se necesita el id de la app."),
-  userId: z.number("Se necesita el id del usuario."),
+  app: z.number("Se necesita el id de la app."),
+  user: z.number("Se necesita el id del usuario."),
+  tenant: z.number("Se necesita el id del tenant."),
 });
+
+export type AssignAppSchema = z.infer<typeof assignAppSchema>;

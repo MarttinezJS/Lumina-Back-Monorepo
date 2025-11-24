@@ -15,6 +15,8 @@ export const saveMenu = ({ ancestor, app, ...data }: MenuFields) =>
         clientVersion: "1",
       });
     }
+    console.log(data, ancestor);
+
     const menuCreated = await client.menu.create({
       data: { ...data, appId: app, ancestorId: ancestor },
     });

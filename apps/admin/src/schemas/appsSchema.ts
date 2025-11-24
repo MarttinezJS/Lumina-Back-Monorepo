@@ -5,5 +5,6 @@ export const appsSchema = z.object({
   description: z.string().optional(),
   icon: z.string().nonempty("El icono es obligatorio"),
   url: z.string().nonempty("La URL es obligatoria"),
-  tenant: z.number("Se necesita el id del tenant."),
 });
+
+export type App = z.infer<typeof appsSchema>;

@@ -5,7 +5,7 @@ import {
 } from "@lumina/prisma";
 import { getNowDate } from "@lumina/utils";
 
-export const assignApp = (appId: number, userId: number) =>
+export const assignApp = (appId: number, userId: number, tenantId: number) =>
   openPrisma("Core", async (client: CoreClient) => {
     const app = await client.apps.findUnique({
       where: { id: appId },
@@ -26,11 +26,12 @@ export const assignApp = (appId: number, userId: number) =>
       data: {
         appId,
         userId,
+        tenantId,
         assignedAt: getNowDate(),
       },
     });
     return {
       data: result,
-      message: "Listado de apps.",
+      message: "Aplicación asignada correctamente.",
     };
   });

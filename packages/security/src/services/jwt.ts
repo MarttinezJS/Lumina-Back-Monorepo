@@ -40,7 +40,6 @@ export const generateJwt = async (
     .setExpirationTime(`${secondsToExpire}s`)
     .sign(privateKey);
   const decryptedToken = await decodeJwt(token);
-  console.log(decryptedToken);
 
   return token;
 };
