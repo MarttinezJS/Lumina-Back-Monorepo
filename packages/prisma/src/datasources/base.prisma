@@ -29,7 +29,6 @@ model Proveedores {
 
 model Logs {
     id       Int       @id @default(autoincrement())
-    userId   Int       @map("usuario_id")
     endpoint String
     action   Actions   @map("accion")
     date     DateTime? @default(now()) @map("fecha")
