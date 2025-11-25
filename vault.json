@@ -1,6 +1,6 @@
 [
   {
-    "vault_path": "dev/backend",
+    "vault_path": "%environment%/backend",
     "set": {
       "CORE_DATABASE_URL": "CORE_DATABASE_URL",
       "CUESTECITAS_DATABASE_URL": "CUESTECITAS_DATABASE_URL",

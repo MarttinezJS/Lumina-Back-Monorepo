@@ -1,9 +1,12 @@
-FROM 192.168.1.11:5001/v2e:latest AS secrets
+FROM registry.sigueadelanteradio.com/v2e:latest AS secrets
 
 ARG VAULT_TOKEN
 ARG VAULT_ADDR
 
 COPY vault.json vault.json
+ARG ENVIRONMENT
+ENV ENVIRONMENT=${ENVIRONMENT}
+RUN sed -i "s|%environment%|$ENVIRONMENT|g" vault.json
 RUN v2e vault.json > secrets
 
 FROM oven/bun:debian AS base
