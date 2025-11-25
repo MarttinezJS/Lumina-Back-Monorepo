@@ -9,9 +9,8 @@ ENV ENVIRONMENT=${ENVIRONMENT}
 RUN sed -i "s|%environment%|$ENVIRONMENT|g" vault.json
 RUN v2e vault.json > secrets
 
-FROM oven/bun:debian AS base
+FROM registry.sigueadelanteradio.com/bun:latest AS base
 WORKDIR /app
-RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 ARG APP
 ENV APP=${APP}
 
