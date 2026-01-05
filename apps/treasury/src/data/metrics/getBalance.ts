@@ -52,8 +52,11 @@ export const getBalanceByYear = (year: number, tenant: Tenant) =>
       await client.$queryRaw`select extract(month from fecha) as mes, sum(cantidad) as total from "Ingresos" where extract(year from fecha) = ${year} group by mes order by mes`;
     const expenses: Summation[] =
       await client.$queryRaw`select extract(month from fecha) as mes, sum(cantidad) as total from "Egresos" where extract(year from fecha) = ${year} group by mes order by mes`;
-
-    const actualMonth = new Date(Date.now()).getMonth() + 1;
+    const today = new Date(Date.now());
+    let actualMonth = 12;
+    if (today.getFullYear() == year) {
+      actualMonth = today.getMonth() + 1;
+    }
     const data = [...Array(actualMonth)].map((_, i) => {
       const income = incomes.find(({ mes }) => mes == i + 1);
       const expense = expenses.find(({ mes }) => mes == i + 1);
