@@ -7,6 +7,8 @@ import {
   createHeadingController,
   createIncome,
   createTransactionalIncome,
+  deleteExpenseController,
+  deleteIncomeController,
   deleteIssueController,
   downloadTemplateController,
   getConceptController,
@@ -72,6 +74,7 @@ const serve = () => {
     createTransactionalIncome
   );
   app.get("/incomes", getIncomesController);
+  app.delete("/incomes/:id", deleteIncomeController);
 
   // Expenses
   app.post("/expenses", validateFields(expensesSchema), saveExpenseController);
@@ -82,6 +85,7 @@ const serve = () => {
   );
   app.get("/expenses", getExpensesController);
   app.post("/expenses/upload", uploadExpensesController);
+  app.delete("/expenses/:id", deleteExpenseController);
 
   // Supplier
   app.post("/suppliers", validateFields(supplierSchema), saveSuppliers);
