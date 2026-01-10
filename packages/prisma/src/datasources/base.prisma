@@ -6,12 +6,15 @@ model Tipo_Identificacion {
 }
 
 model Rubros {
-    id       Int        @id @default(autoincrement())
-    name     String     @map("nombre")
-    income   Boolean
-    status   Boolean    @default(true) @map("activo")
-    Egresos  Egresos[]
-    Ingresos Ingresos[]
+    id                 Int                 @id @default(autoincrement())
+    name               String              @map("nombre")
+    income             Boolean
+    status             Boolean             @default(true) @map("activo")
+    Egresos            Egresos[]
+    Ingresos           Ingresos[]
+    category           CategoriasRubros?   @relation(fields: [categoriasRubrosId], references: [id])
+    categoriasRubrosId Int?                @map("categorias_rubros_id")
+    presupuestoRubros  PresupuestoRubros[]
 
     @@unique([name, income], map: "name_income_index")
 }
@@ -81,6 +84,23 @@ model Conceptos {
     id     Int     @id @default(autoincrement())
     name   String  @unique @map("nombre")
     status Boolean @default(true) @map("activo")
+}
+
+model CategoriasRubros {
+    id     Int      @id @default(autoincrement())
+    name   String   @unique @map("nombre")
+    status Boolean  @default(true) @map("activo")
+    rubros Rubros[]
+}
+
+model PresupuestoRubros {
+    id            Int    @id @default(autoincrement())
+    year          Int
+    amountMonthly Int    @map("cantidad_mensual")
+    headingId     Int    @map("rubro_id")
+    heading       Rubros @relation(fields: [headingId], references: [id])
+
+    @@unique([year, headingId], map: "year_heading_unique_index")
 }
 
 enum Actions {
