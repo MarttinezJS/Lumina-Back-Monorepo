@@ -13,6 +13,7 @@ import {
   deleteIssueController,
   downloadTemplateController,
   getBudgetController,
+  getBudgetExpensesController,
   getConceptController,
   getEntriesController,
   getExpensesController,
@@ -144,7 +145,7 @@ const serve = () => {
   // Budget
   app.post("/budget", validateFields(budgetSchema), createBudgetController);
   app.get("/budget", getBudgetController);
-
+  app.get("/budget/expenses", getBudgetExpensesController);
   Bun.serve({
     fetch: app.fetch,
     port: process.env.PORT,
