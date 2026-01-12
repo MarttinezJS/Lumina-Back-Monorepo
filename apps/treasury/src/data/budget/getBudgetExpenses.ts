@@ -23,7 +23,7 @@ export const getBudgetExpenses = (year: number, tenant: Tenant) =>
             EXTRACT(MONTH FROM e.fecha) AS mes,
             SUM(e.cantidad) AS total
         FROM "Egresos" e
-        WHERE EXTRACT(YEAR FROM e.fecha) = 2025
+        WHERE EXTRACT(YEAR FROM e.fecha) = ${year}
         GROUP BY e.rubro_id, mes
     )
     SELECT
@@ -52,9 +52,11 @@ export const getBudgetExpenses = (year: number, tenant: Tenant) =>
       if (!acc[rubro]) {
         acc[rubro] = {};
       }
-      acc[rubro][getMonthName(mes)] = Number(acumulado);
+      acc[rubro][getMonthName(mes)] = Number(total);
+      acc[rubro].total = Number(acumulado);
+
       acc[rubro].budgeted =
-        budget.find((b) => b.heading.name == rubro)?.amountMonthly ?? 0 * 12;
+        budget.find((b) => b.heading.name == rubro)?.amount ?? 0;
       return acc;
     }, {});
 

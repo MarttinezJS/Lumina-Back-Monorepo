@@ -10,10 +10,10 @@ export const createBudget = (
         create: {
           year,
           headingId,
-          amountMonthly: amount,
+          amount,
         },
         update: {
-          amountMonthly: amount,
+          amount,
         },
         where: {
           year_headingId: { year, headingId },

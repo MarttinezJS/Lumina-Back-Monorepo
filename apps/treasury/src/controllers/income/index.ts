@@ -5,3 +5,4 @@ export * from "./createTransactionalIncome";
 export * from "./downloadTemplateController";
 export * from "./updateIncomeController";
 export * from "./deleteIncomeController";
+export * from "./getAnnualIncomeController";

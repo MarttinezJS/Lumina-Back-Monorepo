@@ -4,3 +4,4 @@ export * from "./saveTransactionalIncome";
 export * from "./saveUploadIncome";
 export * from "./updateIncome";
 export * from "./deleteIncome";
+export * from "./getAnnualIncomes";

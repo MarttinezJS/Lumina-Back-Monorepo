@@ -18,8 +18,8 @@ export const getBudgetByYear = (year: number, tenant: Tenant) =>
 
       return {
         heading: heading.name,
-        monthly: budgetForHeading ? budgetForHeading.amountMonthly : 0,
-        annual: budgetForHeading ? budgetForHeading.amountMonthly * 12 : 0,
+        monthly: budgetForHeading ? budgetForHeading.amount / 12 : 0,
+        annual: budgetForHeading ? budgetForHeading.amount : 0,
       };
     });
 

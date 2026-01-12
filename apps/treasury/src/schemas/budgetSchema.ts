@@ -6,9 +6,7 @@ export const budgetSchema = z.object({
     .array(
       z.object({
         heading: z.number("El ID del encabezado es obligatorio"),
-        amount: z
-          .number("El monto es obligatorio")
-          .positive("El monto debe ser positivo"),
+        amount: z.number("El monto es obligatorio"),
       })
     )
     .nonempty("Debe haber al menos un encabezado en el presupuesto"),

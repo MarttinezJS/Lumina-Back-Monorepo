@@ -12,6 +12,7 @@ import {
   deleteIncomeController,
   deleteIssueController,
   downloadTemplateController,
+  getAnnualIncomeController,
   getBudgetController,
   getBudgetExpensesController,
   getConceptController,
@@ -69,6 +70,7 @@ const serve = () => {
 
   // Income
   app.post("/incomes/upload", uploadIncome);
+  app.get("/incomes/annual", getAnnualIncomeController);
   app.get("/incomes/template", downloadTemplateController);
   app.post("/incomes", validateFields(incomeSchema), createIncome);
   app.put("/incomes/:id", validateFields(incomeSchema), updateIncomeController);
