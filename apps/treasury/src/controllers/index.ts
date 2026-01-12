@@ -6,3 +6,4 @@ export * from "./expenses";
 export * from "./metrics";
 export * from "./concepts";
 export * from "./entryIssue";
+export * from "./budget";

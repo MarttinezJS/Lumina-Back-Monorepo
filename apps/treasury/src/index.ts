@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import {
   balanceController,
   balanceYearController,
+  createBudgetController,
   createConceptController,
   createEntryIssueController,
   createHeadingController,
@@ -11,6 +12,9 @@ import {
   deleteIncomeController,
   deleteIssueController,
   downloadTemplateController,
+  getAnnualIncomeController,
+  getBudgetController,
+  getBudgetExpensesController,
   getConceptController,
   getEntriesController,
   getExpensesController,
@@ -34,6 +38,7 @@ import {
   verifyEntry,
 } from "./controllers";
 import {
+  budgetSchema,
   conceptSchema,
   expensesSchema,
   headingSchema,
@@ -65,6 +70,7 @@ const serve = () => {
 
   // Income
   app.post("/incomes/upload", uploadIncome);
+  app.get("/incomes/annual", getAnnualIncomeController);
   app.get("/incomes/template", downloadTemplateController);
   app.post("/incomes", validateFields(incomeSchema), createIncome);
   app.put("/incomes/:id", validateFields(incomeSchema), updateIncomeController);
@@ -138,6 +144,10 @@ const serve = () => {
   app.patch("/entry-issues/verify", validateFields(verifySchema), verifyEntry);
   app.patch("/entry-issues/solve", validateFields(solveSchema), solveIssue);
 
+  // Budget
+  app.post("/budget", validateFields(budgetSchema), createBudgetController);
+  app.get("/budget", getBudgetController);
+  app.get("/budget/expenses", getBudgetExpensesController);
   Bun.serve({
     fetch: app.fetch,
     port: process.env.PORT,

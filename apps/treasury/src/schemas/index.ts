@@ -6,3 +6,4 @@ export * from "./incomeTransactionalSchema";
 export * from "./expenseSchema";
 export * from "./conceptSchema";
 export * from "./issueSchema";
+export * from "./budgetSchema";
