@@ -1,0 +1,17 @@
+{
+  "name": "reports",
+  "scripts": {
+    "build": "echo Build",
+    "dev": "bun run --hot --env-file=.env --env-file=../../.env src/index.ts"
+  },
+  "dependencies": {
+    "@lumina/middlewares": "^",
+    "@lumina/prisma": "workspace:*",
+    "@lumina/security": "workspace:*",
+    "@lumina/utils": "workspace:*",
+    "@sparticuz/chromium": "^143.0.4",
+    "handlebars": "^4.7.8",
+    "node-xlsx": "^0.24.0",
+    "puppeteer-core": "^24.35.0"
+  }
+}

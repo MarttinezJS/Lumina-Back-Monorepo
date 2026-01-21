@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ingresos del año</title>
+  </head>
+  <body>
+    <header class="report-header">
+      <div class="header-left">
+        <h1>Ingresos {{year}}</h1>
+        <p class="header-subtitle">Resumen financiero anual</p>
+      </div>
+        <div class="metric">
+          <span class="metric-label">Total</span>
+          <span class="metric-value">
+            $ {{formatCurrency spent}}
+          </span>
+        </div>
+      </div>
+    </header>
+    <table>
+      <thead>
+        <tr class="table-header">
+          <th>Rubro</th>
+          <th>Enero</th>
+          <th>Febrero</th>
+          <th>Marzo</th>
+          <th>Abril</th>
+          <th>Mayo</th>
+          <th>Junio</th>
+          <th>Julio</th>
+          <th>Agosto</th>
+          <th>Septiembre</th>
+          <th>Octubre</th>
+          <th>Noviembre</th>
+          <th>Diciembre</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each data}}
+        <tr>
+          <td class="table-header">{{@key}}</td>
+          <td>{{formatCurrency ENERO}}</td>
+          <td>{{formatCurrency FEBRERO}}</td>
+          <td>{{formatCurrency MARZO}}</td>
+          <td>{{formatCurrency ABRIL}}</td>
+          <td>{{formatCurrency MAYO}}</td>
+          <td>{{formatCurrency JUNIO}}</td>
+          <td>{{formatCurrency JULIO}}</td>
+          <td>{{formatCurrency AGOSTO}}</td>
+          <td>{{formatCurrency SEPTIEMBRE}}</td>
+          <td>{{formatCurrency OCTUBRE}}</td>
+          <td>{{formatCurrency NOVIEMBRE}}</td>
+          <td>{{formatCurrency DICIEMBRE}}</td>
+          <td>{{formatCurrency total}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </body>
+</html>
