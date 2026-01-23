@@ -44,6 +44,7 @@ export const annualExpensesController = async (
       landscape: true,
     },
   );
+
   context.res.headers.append("X-RESPONSE-TYPE", "FILE");
   return context.body(pdf, 200, {
     "Content-Type": "application/pdf",

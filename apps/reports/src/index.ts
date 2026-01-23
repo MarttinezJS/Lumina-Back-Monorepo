@@ -1,12 +1,12 @@
 import { Hono } from "hono";
-import { registerLog, validateFields, verifyToken } from "@lumina/middlewares";
+import { registerLog, verifyToken } from "@lumina/middlewares";
 import { setBoundData } from "@lumina/security";
 import {
   annualExpensesController,
   getAnnualIncomesController,
 } from "./controllers";
 
-const serve = async () => {
+const serve = () => {
   const app = new Hono();
   setBoundData();
   app.use("*", verifyToken);
@@ -17,10 +17,11 @@ const serve = async () => {
   });
 
   // Incomes
-  app.use("/incomes/anual", getAnnualIncomesController);
+  app.get("/incomes/annual", getAnnualIncomesController);
 
   // Expenses
-  app.use("/expenses/anual", annualExpensesController);
+  app.get("/expenses/annual", annualExpensesController);
+
   Bun.serve({
     fetch: app.fetch,
     port: process.env.PORT,

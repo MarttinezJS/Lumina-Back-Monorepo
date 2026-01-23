@@ -1,5 +1,5 @@
 import { Data } from "hono/dist/types/context";
-import { getTemplate } from "../templates";
+import { getCss, getTemplate } from "../templates";
 import Handlebars = require("handlebars");
 import puppeteer from "puppeteer-core";
 import Chromium from "@sparticuz/chromium";
@@ -21,9 +21,19 @@ export const generateReport = async (
   args?: Args,
 ) => {
   const browser = await puppeteer.launch({
-    args: Chromium.args,
     executablePath: await Chromium.executablePath(),
     headless: true,
+    args:
+      Bun.env.ENVIRONMENT == "PRD"
+        ? [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-gpu",
+            "--no-zygote",
+            "--single-process",
+          ]
+        : Chromium.args,
   });
   try {
     const source = await getTemplate(templateName);
@@ -32,7 +42,7 @@ export const generateReport = async (
     const page = await browser.newPage();
 
     await page.setContent(html, { waitUntil: "domcontentloaded" });
-    const style = await Bun.file("./src/templates/global.css").text();
+    const style = await getCss();
     await page.addStyleTag({
       content: style,
     });

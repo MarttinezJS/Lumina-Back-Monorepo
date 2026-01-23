@@ -1,3 +1,5 @@
+import { StringFilter } from "../generated/client-core/commonInputTypes";
+
 export const convert2Boolean = (query: string) => {
   if (query == null) return;
   switch (query) {
@@ -10,7 +12,7 @@ export const convert2Boolean = (query: string) => {
   }
 };
 
-export const convert2String = (query: string) => {
+export const convert2String = (query: string): StringFilter | undefined => {
   if (query == null) return;
   return {
     contains: query,
@@ -18,7 +20,7 @@ export const convert2String = (query: string) => {
   };
 };
 
-export const convert2Number = (query: string) => {
+export const convert2Number = (query: string): number | undefined => {
   const number = Number.parseInt(query);
   return isNaN(number) ? undefined : number;
 };

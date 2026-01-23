@@ -140,15 +140,28 @@ model Usuarios_Reportes {
 }
 
 model Reportes {
-    id                Int                 @id @default(autoincrement())
-    name              String              @unique @map("nombre")
-    endpoint          String              @map("url")
-    app               Apps                @relation(fields: [appsId], references: [id])
-    status            Boolean?            @default(true) @map("activo")
-    appsId            Int                 @map("app_id")
-    categoryReport    Categorias_Reportes @relation(fields: [categoryReportsId], references: [id])
-    categoryReportsId Int                 @map("categorias_reportes_id")
+    id                Int                   @id @default(autoincrement())
+    name              String                @unique @map("nombre")
+    endpoint          String                @map("url")
+    app               Apps                  @relation(fields: [appsId], references: [id])
+    status            Boolean?              @default(true) @map("activo")
+    appsId            Int                   @map("app_id")
+    categoryReport    Categorias_Reportes   @relation(fields: [categoryReportsId], references: [id])
+    categoryReportsId Int                   @map("categorias_reportes_id")
     usuariosReportes  Usuarios_Reportes[]
+    paramsReports     Parametros_Reportes[]
+}
+
+model Parametros_Reportes {
+    id       Int      @id @default(autoincrement())
+    report   Reportes @relation(fields: [reportsId], references: [id])
+    variant  String   @map("variante")
+    name     String   @map("nombre")
+    field    String   @map("clave")
+    queryUrl String?  @map("url_autocomplete")
+    type     String?  @map("tipo_input")
+
+    reportsId Int @map("reportes_id")
 }
 
 enum Actions {

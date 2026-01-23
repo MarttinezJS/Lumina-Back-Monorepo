@@ -9,7 +9,7 @@ ENV ENVIRONMENT=${ENVIRONMENT}
 RUN sed -i "s|%environment%|$ENVIRONMENT|g" vault.json
 RUN v2e vault.json > secrets
 
-FROM registry.sigueadelanteradio.com/bun:latest AS base
+FROM registry.sigueadelanteradio.com/bun:1.0.0-chromium AS base
 WORKDIR /app
 ARG APP
 ENV APP=${APP}
