@@ -30,17 +30,18 @@ model Permisos {
 }
 
 model Usuarios {
-    id             Int              @id @default(autoincrement())
-    email          String           @unique @map("correo") @db.VarChar(50)
-    username       String           @unique @map("usuario") @db.VarChar(20)
-    password       String
-    firstName      String           @map("nombre") @db.VarChar(100)
-    lastName       String           @map("apellido") @db.VarChar(100)
-    changePassword Boolean?         @default(false) @map("cambiar_password")
-    status         Boolean?         @default(true) @map("activo")
-    permission     Permisos[]
-    UsuariosApps   UsuariosApps[]
-    UsuariosTenant UsuariosTenant[]
+    id               Int                 @id @default(autoincrement())
+    email            String              @unique @map("correo") @db.VarChar(50)
+    username         String              @unique @map("usuario") @db.VarChar(20)
+    password         String
+    firstName        String              @map("nombre") @db.VarChar(100)
+    lastName         String              @map("apellido") @db.VarChar(100)
+    changePassword   Boolean?            @default(false) @map("cambiar_password")
+    status           Boolean?            @default(true) @map("activo")
+    permission       Permisos[]
+    UsuariosApps     UsuariosApps[]
+    UsuariosTenant   UsuariosTenant[]
+    usuariosReportes Usuarios_Reportes[]
 }
 
 model Menu {
@@ -77,6 +78,7 @@ model Apps {
     color        String?
     UsuariosApps UsuariosApps[]
     Menu         Menu[]
+    pdfs         Reportes[]
 }
 
 model Tenant {
@@ -118,6 +120,48 @@ model Logs {
     persist  Boolean?  @default(true) @map("persistir")
     resp     String
     username String    @map("usuario")
+}
+
+model Categorias_Reportes {
+    id       Int        @id @default(autoincrement())
+    name     String     @unique @map("nombre")
+    status   Boolean?   @default(true) @map("activo")
+    reportes Reportes[]
+}
+
+model Usuarios_Reportes {
+    report    Reportes  @relation(fields: [reportId], references: [id])
+    user      Usuarios  @relation(fields: [userId], references: [id])
+    reportId  Int       @map("reporte_id")
+    userId    Int       @map("usuario_id")
+    createdAt DateTime? @default(now())
+
+    @@id([reportId, userId])
+}
+
+model Reportes {
+    id                Int                   @id @default(autoincrement())
+    name              String                @unique @map("nombre")
+    endpoint          String                @map("url")
+    app               Apps                  @relation(fields: [appsId], references: [id])
+    status            Boolean?              @default(true) @map("activo")
+    appsId            Int                   @map("app_id")
+    categoryReport    Categorias_Reportes   @relation(fields: [categoryReportsId], references: [id])
+    categoryReportsId Int                   @map("categorias_reportes_id")
+    usuariosReportes  Usuarios_Reportes[]
+    paramsReports     Parametros_Reportes[]
+}
+
+model Parametros_Reportes {
+    id       Int      @id @default(autoincrement())
+    report   Reportes @relation(fields: [reportsId], references: [id])
+    variant  String   @map("variante")
+    name     String   @map("nombre")
+    field    String   @map("clave")
+    queryUrl String?  @map("url_autocomplete")
+    type     String?  @map("tipo_input")
+
+    reportsId Int @map("reportes_id")
 }
 
 enum Actions {

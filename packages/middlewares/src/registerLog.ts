@@ -9,7 +9,7 @@ export const registerLog = createMiddleware(async (context, next) => {
   const cookieSession = await getSignedCookie(
     context,
     Bun.env.SECRET_SEED!,
-    "auth"
+    "auth",
   );
   let tenant: "Core" = "Core";
   let username: string | undefined = undefined;
@@ -19,8 +19,21 @@ export const registerLog = createMiddleware(async (context, next) => {
     tenant = data?.tenant ?? "Core";
     username = data?.username;
   }
-  const resp = await context.res.clone().json();
-  const respStringify = await JSON.stringify(resp);
+  const resType = context.res.headers.get("X-RESPONSE-TYPE") ?? "JSON";
+  let respStringify = "";
+  switch (resType) {
+    case "JSON":
+      const resp = await context.res.clone().json();
+      respStringify = await JSON.stringify(resp);
+
+      break;
+    case "FILE":
+      break;
+
+    default:
+      respStringify = "Respuesta no legible.";
+      break;
+  }
   if (username == undefined) {
     return;
   }
@@ -31,7 +44,7 @@ export const registerLog = createMiddleware(async (context, next) => {
       username,
       resp: respStringify,
     },
-    tenant
+    tenant,
   );
 });
 

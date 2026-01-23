@@ -1,7 +1,7 @@
 import { PrismaClient, openPrisma, Tenant } from "@lumina/prisma";
 import { getMonthName } from "@lumina/utils";
 
-export const getBudgetExpenses = (year: number, tenant: Tenant) =>
+export const getAnnualExpenses = (year: number, tenant: Tenant) =>
   openPrisma(tenant, async (client: PrismaClient) => {
     const budget = await client.presupuestoRubros.findMany({
       where: { year },

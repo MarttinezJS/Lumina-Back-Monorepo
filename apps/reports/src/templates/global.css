@@ -1,0 +1,139 @@
+body {
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  color: #1f2937;
+  margin: 40px;
+}
+
+/* =======================
+   TITULOS
+======================= */
+h1 {
+  font-size: 18px;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 16px;
+  page-break-inside: auto;
+}
+
+thead {
+  background-color: #16a34a;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+thead th {
+  color: #ffffff;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: right;
+}
+
+thead th:first-child {
+  text-align: left;
+}
+
+tbody td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: right;
+}
+
+tbody td:first-child {
+  text-align: left;
+  font-weight: 500;
+  color: #111827;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+tbody tr:hover {
+  background-color: #ecfdf5;
+}
+
+tfoot {
+  display: table-footer-group;
+}
+
+tfoot td {
+  padding: 10px 12px;
+  font-weight: 700;
+  background-color: #dcfce7;
+  border-top: 2px solid #16a34a;
+  text-align: right;
+}
+
+tfoot td:first-child {
+  text-align: left;
+}
+
+tr {
+  page-break-inside: avoid;
+  page-break-after: auto;
+}
+
+.budget {
+  color: #4b5563;
+  font-style: italic;
+}
+
+@page {
+  size: Letter landscape;
+  margin: 90px 40px 70px 40px;
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.header-subtitle {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.metric {
+  text-align: right;
+  min-width: 140px;
+}
+
+.metric-label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}

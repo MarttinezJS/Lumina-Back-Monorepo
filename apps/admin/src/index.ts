@@ -2,17 +2,28 @@ import { Hono } from "hono";
 import {
   appById,
   assignAppController,
+  categoriesController,
   createAppController,
+  createReportController,
   createTenantController,
+  getAllCategoriesController,
   getAppsAssigned,
   getAppsController,
+  getCategoriesController,
+  getReportsController,
   getTenantsController,
   removeUserAppController,
   updateAppController,
   usersByAppsController,
 } from "./controllers";
 import { registerLog, validateFields, verifyToken } from "@lumina/middlewares";
-import { appsSchema, assignAppSchema, tenantSchema } from "./schemas";
+import {
+  appsSchema,
+  assignAppSchema,
+  categorySchema,
+  reportSchema,
+  tenantSchema,
+} from "./schemas";
 import { setBoundData } from "@lumina/security";
 const serve = () => {
   const app = new Hono();
@@ -33,12 +44,12 @@ const serve = () => {
   app.get("/apps/user/:id", getAppsAssigned);
   app.delete(
     "/apps/:appId/tenant/:tenantId/users/:userId",
-    removeUserAppController
+    removeUserAppController,
   );
   app.post(
     "/apps/assign",
     validateFields(assignAppSchema),
-    assignAppController
+    assignAppController,
   );
 
   // Tenants
@@ -48,6 +59,15 @@ const serve = () => {
   app.get("/tenants", getTenantsController);
   app.get("/tenants/:id");
   app.put("/tenants/:id");
+
+  // Reports
+  app.post("/reports", validateFields(reportSchema), createReportController);
+  app.get("/reports", getReportsController);
+
+  // Categories
+  app.post("/categories", validateFields(categorySchema), categoriesController);
+  app.get("/categories", getCategoriesController);
+  app.get("/categories/all", getAllCategoriesController);
 
   Bun.serve({
     fetch: app.fetch,
