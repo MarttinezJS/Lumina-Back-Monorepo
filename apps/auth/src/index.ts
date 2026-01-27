@@ -4,6 +4,7 @@ import {
   changePassSchema,
   loginSchema,
   menuSchema,
+  reportUserSchema,
   updateUserSchema,
   userMenuSchema,
   userSchema,
@@ -30,6 +31,9 @@ import {
   logout,
   getTenantByUserController,
   deleteUserTenantController,
+  getReportsAssignController,
+  deleteReportUserController,
+  assignReportController,
 } from "./controllers";
 import { registerLog, validateFields, verifyToken } from "@lumina/middlewares";
 import { initJwk, setBoundData } from "@lumina/security";
@@ -75,6 +79,13 @@ const serve = async () => {
   app.get("/users/:id", getUserById);
   app.get("/users/:id/authorize", authorizedController);
   app.get("/users/:id/apps", getUserApps);
+  app.post(
+    "/users/assign-report",
+    validateFields(reportUserSchema),
+    assignReportController,
+  );
+  app.delete("/users/:userId/report/:reportId", deleteReportUserController);
+  app.get("/users/:id/reports", getReportsAssignController);
 
   // Menus
   app.use("/menus/*", verifyToken);
