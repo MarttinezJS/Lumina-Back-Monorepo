@@ -5,3 +5,4 @@ export * from "./getTenantsController";
 export * from "./menus";
 export * from "./permissions";
 export * from "./logout";
+export * from "./reports";

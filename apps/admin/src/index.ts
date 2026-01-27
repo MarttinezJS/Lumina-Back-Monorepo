@@ -4,14 +4,24 @@ import {
   assignAppController,
   categoriesController,
   createAppController,
+  createParamController,
   createReportController,
   createTenantController,
+  deleteParamController,
+  deleteReportController,
+  getAllAppsController,
   getAllCategoriesController,
+  getAllReportsController,
+  getAllTenantsController,
   getAppsAssigned,
+  getAppsByUserTenantController,
   getAppsController,
   getCategoriesController,
+  getParamsByReport,
+  getParamsController,
   getReportsController,
   getTenantsController,
+  modifyReportController,
   removeUserAppController,
   updateAppController,
   usersByAppsController,
@@ -21,6 +31,7 @@ import {
   appsSchema,
   assignAppSchema,
   categorySchema,
+  paramReportSchema,
   reportSchema,
   tenantSchema,
 } from "./schemas";
@@ -38,10 +49,12 @@ const serve = () => {
   // Apps
   app.post("/apps", validateFields(appsSchema), createAppController);
   app.get("/apps", getAppsController);
+  app.get("/apps/all", getAllAppsController);
   app.get("/apps/:id", appById);
   app.get("/apps/:appId/tenant/:tenantId/users", usersByAppsController);
   app.put("/apps/:id", updateAppController);
   app.get("/apps/user/:id", getAppsAssigned);
+  app.get("/apps/user/:id/tenant/:tenantId", getAppsByUserTenantController);
   app.delete(
     "/apps/:appId/tenant/:tenantId/users/:userId",
     removeUserAppController,
@@ -55,7 +68,7 @@ const serve = () => {
   // Tenants
   app.post("/tenants", validateFields(tenantSchema), createTenantController);
   app.post("/tenants/:id/apps");
-  app.delete("/tenants/:tenantId/users/userId");
+  app.get("/tenants/all", getAllTenantsController);
   app.get("/tenants", getTenantsController);
   app.get("/tenants/:id");
   app.put("/tenants/:id");
@@ -63,6 +76,15 @@ const serve = () => {
   // Reports
   app.post("/reports", validateFields(reportSchema), createReportController);
   app.get("/reports", getReportsController);
+  app.get("/reports/all", getAllReportsController);
+  app.put("/reports/:id", validateFields(reportSchema), modifyReportController);
+  app.delete("/reports/:id", deleteReportController);
+
+  // Params Reports
+  app.post("/params", validateFields(paramReportSchema), createParamController);
+  app.get("/params/reports/:id", getParamsByReport);
+  app.get("/params", getParamsController);
+  app.delete("/params/:id", deleteParamController);
 
   // Categories
   app.post("/categories", validateFields(categorySchema), categoriesController);

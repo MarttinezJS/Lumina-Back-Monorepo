@@ -5,3 +5,5 @@ export * from "./updateUserController";
 export * from "./changePassController";
 export * from "./assignTenantController";
 export * from "./getAppsController";
+export * from "./getTenantByUserController";
+export * from "./deleteUserTenantController";

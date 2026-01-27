@@ -4,6 +4,7 @@ import {
   changePassSchema,
   loginSchema,
   menuSchema,
+  reportUserSchema,
   updateUserSchema,
   userMenuSchema,
   userSchema,
@@ -28,6 +29,11 @@ import {
   assignTenantController,
   getUserApps,
   logout,
+  getTenantByUserController,
+  deleteUserTenantController,
+  getReportsAssignController,
+  deleteReportUserController,
+  assignReportController,
 } from "./controllers";
 import { registerLog, validateFields, verifyToken } from "@lumina/middlewares";
 import { initJwk, setBoundData } from "@lumina/security";
@@ -39,7 +45,7 @@ const serve = async () => {
   app.on(
     ["GET", "POST", "DELETE", "PUT"],
     ["/users/*", "/menus/*"],
-    registerLog
+    registerLog,
   );
 
   app.use("*", (c, next) => {
@@ -51,26 +57,35 @@ const serve = async () => {
   app.use("/users/*", verifyToken);
   app.post("/users/menu");
   app.post("/users", validateFields(userSchema), createUser);
+  app.get("/users/:id/tenants", getTenantByUserController);
+  app.delete("/users/:userId/tenants/:tenantId", deleteUserTenantController);
   app.post(
     "/users/:id/tenants",
     validateFields(assignUserTenantSchema),
-    assignTenantController
+    assignTenantController,
   );
   app.put("/users/:id", validateFields(updateUserSchema), updateUserController);
   app.get("/users", getAllUsers);
   app.post(
     "/users/assign-menu",
     validateFields(userMenuSchema),
-    assignMenuUsersController
+    assignMenuUsersController,
   );
   app.put(
     "/users/:id/change-password",
     validateFields(changePassSchema),
-    changePassController
+    changePassController,
   );
   app.get("/users/:id", getUserById);
   app.get("/users/:id/authorize", authorizedController);
   app.get("/users/:id/apps", getUserApps);
+  app.post(
+    "/users/assign-report",
+    validateFields(reportUserSchema),
+    assignReportController,
+  );
+  app.delete("/users/:userId/report/:reportId", deleteReportUserController);
+  app.get("/users/:id/reports", getReportsAssignController);
 
   // Menus
   app.use("/menus/*", verifyToken);

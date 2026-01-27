@@ -6,3 +6,5 @@ export * from "./modifyApp";
 export * from "./getAppById";
 export * from "./usersByApps";
 export * from "./removeUserApp";
+export * from "./getAppByUserTenant";
+export * from "./getAllApps";
