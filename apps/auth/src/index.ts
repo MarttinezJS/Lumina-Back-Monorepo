@@ -28,6 +28,8 @@ import {
   assignTenantController,
   getUserApps,
   logout,
+  getTenantByUserController,
+  deleteUserTenantController,
 } from "./controllers";
 import { registerLog, validateFields, verifyToken } from "@lumina/middlewares";
 import { initJwk, setBoundData } from "@lumina/security";
@@ -39,7 +41,7 @@ const serve = async () => {
   app.on(
     ["GET", "POST", "DELETE", "PUT"],
     ["/users/*", "/menus/*"],
-    registerLog
+    registerLog,
   );
 
   app.use("*", (c, next) => {
@@ -51,22 +53,24 @@ const serve = async () => {
   app.use("/users/*", verifyToken);
   app.post("/users/menu");
   app.post("/users", validateFields(userSchema), createUser);
+  app.get("/users/:id/tenants", getTenantByUserController);
+  app.delete("/users/:userId/tenants/:tenantId", deleteUserTenantController);
   app.post(
     "/users/:id/tenants",
     validateFields(assignUserTenantSchema),
-    assignTenantController
+    assignTenantController,
   );
   app.put("/users/:id", validateFields(updateUserSchema), updateUserController);
   app.get("/users", getAllUsers);
   app.post(
     "/users/assign-menu",
     validateFields(userMenuSchema),
-    assignMenuUsersController
+    assignMenuUsersController,
   );
   app.put(
     "/users/:id/change-password",
     validateFields(changePassSchema),
-    changePassController
+    changePassController,
   );
   app.get("/users/:id", getUserById);
   app.get("/users/:id/authorize", authorizedController);

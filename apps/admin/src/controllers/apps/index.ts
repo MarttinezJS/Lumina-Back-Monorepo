@@ -6,3 +6,5 @@ export * from "./updateAppController";
 export * from "./appById";
 export * from "./usersByAppsController";
 export * from "./removeUserAppController";
+export * from "./getAppsByUserTenantController";
+export * from "./getAllAppsController";

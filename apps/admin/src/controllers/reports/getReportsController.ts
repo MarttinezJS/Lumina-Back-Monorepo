@@ -17,6 +17,11 @@ export const getReportsController = async (context: Context<Env, "", {}>) => {
       endpoint: convert2String(params.endpoint),
       name: convert2String(params.name),
       status: convert2Boolean(params.active),
+      usuariosReportes: {
+        every: {
+          userId: convert2Number(params.user),
+        },
+      },
     },
   );
   return context.json(

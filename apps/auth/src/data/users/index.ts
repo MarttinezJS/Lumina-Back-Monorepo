@@ -7,3 +7,5 @@ export * from "./changePass";
 export * from "./authorize";
 export * from "./assignTenant";
 export * from "./getApps";
+export * from "./getTenantsByUser";
+export * from "./deleteUserTenant";
