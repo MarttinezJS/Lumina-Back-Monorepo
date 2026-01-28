@@ -1,3 +1,4 @@
+ARG BASE_IMAGE=registry.sigueadelanteradio.com/bun:latest
 FROM registry.sigueadelanteradio.com/v2e:latest AS secrets
 
 ARG VAULT_TOKEN
@@ -9,7 +10,7 @@ ENV ENVIRONMENT=${ENVIRONMENT}
 RUN sed -i "s|%environment%|$ENVIRONMENT|g" vault.json
 RUN v2e vault.json > secrets
 
-FROM registry.sigueadelanteradio.com/bun:1.0.0-chromium AS base
+FROM ${BASE_IMAGE} AS base
 WORKDIR /app
 ARG APP
 ENV APP=${APP}
